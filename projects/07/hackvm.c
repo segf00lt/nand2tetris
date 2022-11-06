@@ -8,6 +8,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <libgen.h>
 #include "fmap.c"
 
 typedef struct {
@@ -190,78 +191,110 @@ void debug_parsed(Snode *nodes) {
 	}
 }
 
-
-void generate(Snode *nodes) {
-	unsigned int compcount = 0;
+void compile(char *fname, char *text, FILE *dest) {
 	char c;
 	char *s;
 	char binoptab[] = {'+', '-', '&', '|'};
 	char unoptab[] = {'-', '!'};
 	char *cmpoptab[] = {"JEQ", "JGT", "JLT"};
+	unsigned int compcount = 0;
+	Snode *syntaxarr = parse(text);
+	Snode *nodes = syntaxarr;
+	debug_parsed(syntaxarr);
+
+	/* TODO output preamble code to init memory segments */
 
 	for(Snode cur = *nodes; cur.cmd; cur = *++nodes) {
 		switch(cur.cmd) {
 		case ADD: case SUB: case AND: case OR:
 			c = binoptab[cur.cmd - ADD];
-			printf("@SP\nA=M-1\nD=M\nA=A-1\nM=M%cD\nD=A+1\n@SP\nM=D\n", c);
+			fprintf(dest, "@SP\nA=M-1\nD=M\nA=A-1\nM=M%cD\nD=A+1\n@SP\nM=D\n", c);
 			break;
 		case NEG: case NOT:
 			c = unoptab[cur.cmd - NEG];
-			printf("@SP\nA=M-1\nM=%cM\n", c);
+			fprintf(dest, "@SP\nA=M-1\nM=%cM\n", c);
 			break;
 		case EQ: case GT: case LT:
 			s = cmpoptab[cur.cmd - EQ];
-			printf("@SP\nA=M-1\nD=M\nA=A-1\nD=M-D\nM=-1\n@SP\nM=M-1\n");
+			fprintf(dest, "@SP\nA=M-1\nD=M\nA=A-1\nD=M-D\nM=-1\n@SP\nM=M-1\n");
 
 			/* TODO optimize chained comparison? */
 			/* common case optimization */
 			if(nodes[1].cmd == IFGOTO) {
 				++nodes;
-				printf("@%s\nD;%s\n@SP\nA=M-1\nM=0\n", nodes->arg1, s);
+				fprintf(dest, "@%s\nD;%s\n@SP\nA=M-1\nM=0\n", nodes->arg1, s);
 				break;
 			}
 			
-			printf("@TRUE_COMPARISON_%i\nD;%s\n@SP\nA=M-1\nM=0\n(TRUE_COMPARISON_%i)\n",
-					compcount, s, compcount);
+			fprintf(dest, "@%s.TRUE_COMPARISON_%i\nD;%s\n@SP\nA=M-1\nM=0\n(%s.TRUE_COMPARISON_%i)\n",
+					fname, compcount, s, fname, compcount);
 			++compcount;
 			break;
 		case PUSH:
 			if(!strcmp(cur.arg1, "constant")) {
-				printf("@%s\nD=A\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "argument")) {
-				printf("@%s\nD=A\n@ARG\nA=M+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n@ARG\nA=M+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "local")) {
-				printf("@%s\nD=A\n@LCL\nA=M+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n@LCL\nA=M+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "this")) {
-				printf("@%s\nD=A\n@THIS\nA=M+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n@THIS\nA=M+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "that")) {
-				printf("@%s\nD=A\n@THAT\nA=M+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n@THAT\nA=M+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "temp")) {
 				/* R5-12 */
-				printf("@%s\nD=A\n@R5\nA=A+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n@R5\nA=A+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "pointer")) {
 				/* R13-14 */
-				printf("@%s\nD=A\n@R13\nA=A+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n@R13\nA=A+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "static")) {
-				/* TODO is the static segment R16 onward? */
-				printf("@%s\nD=A\n@R15\nA=M+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s.%s\nD=M\n", fname, cur.arg2);
 			}
-			printf("@SP\nA=M\nM=D\n@SP\nM=M+1\n");
+
+			fprintf(dest, "@SP\nA=M\nM=D\n@SP\nM=M+1\n");
 			break;
 		case POP:
+			/* pop uses R15 to store destination address */
+			if(!strcmp(cur.arg1, "constant")) {
+				fprintf(dest, "@R15\nM=A\n");
+			} else if(!strcmp(cur.arg1, "argument")) {
+				fprintf(dest, "@%s\nD=A\n@ARG\nD=M+D\n@R15\nM=D\n", cur.arg2);
+			} else if(!strcmp(cur.arg1, "local")) {
+				fprintf(dest, "@%s\nD=A\n@LCL\nD=M+D\n@R15\nM=D\n", cur.arg2);
+			} else if(!strcmp(cur.arg1, "this")) {
+				fprintf(dest, "@%s\nD=A\n@THIS\nD=M+D\n@R15\nM=D\n", cur.arg2);
+			} else if(!strcmp(cur.arg1, "that")) {
+				fprintf(dest, "@%s\nD=A\n@THAT\nD=M+D\n@R15\nM=D\n", cur.arg2);
+			} else if(!strcmp(cur.arg1, "temp")) {
+				/* R5-12 */
+				fprintf(dest, "@%s\nD=A\n@R5\nD=A+D\n@R15\nM=D\n", cur.arg2);
+			} else if(!strcmp(cur.arg1, "pointer")) {
+				/* TODO broken
+				 * this that are probably broken too
+				 */
+				/* R13-14 */
+				fprintf(dest, "@%s\nD=A\n@R13\nD=A+D\n@R15\nM=D\n", cur.arg2);
+			} else if(!strcmp(cur.arg1, "static")) {
+				/* TODO broken */
+				fprintf(dest, "@%s.%s\nD=M\n", fname, cur.arg2);
+			}
+
+			fprintf(dest, "@SP\nM=M-1\nA=M\nD=M\n@R15\nA=M\nM=D\n");
 			break;
 		}
 	}
+
+	free(syntaxarr);
 }
 
 int main(int argc, char *argv[]) {
 	Fmap fm;
+	FILE *dest;
 	fmapopen(argv[1], O_RDONLY, &fm);
+	dest = fopen(argv[2], "w");
 	fmapread(&fm);
-	Snode *syntaxarr = parse(fm.buf);
-	debug_parsed(syntaxarr);
-	generate(syntaxarr);
-	free(syntaxarr);
+	compile(basename(fm.name), fm.buf, dest);
 	fmapclose(&fm);
+	fclose(dest);
 	return 0;
 }
