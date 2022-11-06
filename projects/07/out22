@@ -1,0 +1,190 @@
+Snode 1:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 17
+Snode 2:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 17
+Snode 3:
+	type: CMP
+	cmd: EQ
+	arg1: 
+	arg2: 
+Snode 4:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 17
+Snode 5:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 16
+Snode 6:
+	type: CMP
+	cmd: EQ
+	arg1: 
+	arg2: 
+Snode 7:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 16
+Snode 8:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 17
+Snode 9:
+	type: CMP
+	cmd: EQ
+	arg1: 
+	arg2: 
+Snode 10:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 892
+Snode 11:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 891
+Snode 12:
+	type: CMP
+	cmd: LT
+	arg1: 
+	arg2: 
+Snode 13:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 891
+Snode 14:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 892
+Snode 15:
+	type: CMP
+	cmd: LT
+	arg1: 
+	arg2: 
+Snode 16:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 891
+Snode 17:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 891
+Snode 18:
+	type: CMP
+	cmd: LT
+	arg1: 
+	arg2: 
+Snode 19:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 32767
+Snode 20:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 32766
+Snode 21:
+	type: CMP
+	cmd: GT
+	arg1: 
+	arg2: 
+Snode 22:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 32766
+Snode 23:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 32767
+Snode 24:
+	type: CMP
+	cmd: GT
+	arg1: 
+	arg2: 
+Snode 25:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 32766
+Snode 26:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 32766
+Snode 27:
+	type: CMP
+	cmd: GT
+	arg1: 
+	arg2: 
+Snode 28:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 57
+Snode 29:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 31
+Snode 30:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 53
+Snode 31:
+	type: BINOP
+	cmd: ADD
+	arg1: 
+	arg2: 
+Snode 32:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 112
+Snode 33:
+	type: BINOP
+	cmd: SUB
+	arg1: 
+	arg2: 
+Snode 34:
+	type: UNOP
+	cmd: NEG
+	arg1: 
+	arg2: 
+Snode 35:
+	type: BINOP
+	cmd: AND
+	arg1: 
+	arg2: 
+Snode 36:
+	type: MEM
+	cmd: PUSH
+	arg1: constant
+	arg2: 82
+Snode 37:
+	type: BINOP
+	cmd: OR
+	arg1: 
+	arg2: 
+Snode 38:
+	type: UNOP
+	cmd: NOT
+	arg1: 
+	arg2: 

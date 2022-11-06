@@ -1,0 +1,6 @@
+*.out
+*.pdf
+*.epub
+*.zip
+tools/
+submit/

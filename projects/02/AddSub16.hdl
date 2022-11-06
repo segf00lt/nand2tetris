@@ -1,0 +1,44 @@
+/**
+ * Adds or subtracts two 16-bit integers.
+ * TODO write test script
+ */
+
+CHIP AddSub16 {
+    IN a[16], b[16], op;
+    OUT out[16], carry;
+
+    PARTS:
+    // Put you code here:
+    Xor(a=b[0], b=op, out=b0XorOp);
+    Xor(a=b[1], b=op, out=b1XorOp);
+    Xor(a=b[2], b=op, out=b2XorOp);
+    Xor(a=b[3], b=op, out=b3XorOp);
+    Xor(a=b[4], b=op, out=b4XorOp);
+    Xor(a=b[5], b=op, out=b5XorOp);
+    Xor(a=b[6], b=op, out=b6XorOp);
+    Xor(a=b[7], b=op, out=b7XorOp);
+    Xor(a=b[8], b=op, out=b8XorOp);
+    Xor(a=b[9], b=op, out=b9XorOp);
+    Xor(a=b[10], b=op, out=b10XorOp);
+    Xor(a=b[11], b=op, out=b11XorOp);
+    Xor(a=b[12], b=op, out=b12XorOp);
+    Xor(a=b[13], b=op, out=b13XorOp);
+    Xor(a=b[14], b=op, out=b14XorOp);
+    Xor(a=b[15], b=op, out=b15XorOp);
+    FullAdder(a=a[0], b=b0XorOp, c=op, sum=out[0], carry=carry0);
+    FullAdder(a=a[1], b=b1XorOp, c=carry0, sum=out[1], carry=carry1);
+    FullAdder(a=a[2], b=b2XorOp, c=carry1, sum=out[2], carry=carry2);
+    FullAdder(a=a[3], b=b3XorOp, c=carry2, sum=out[3], carry=carry3);
+    FullAdder(a=a[4], b=b4XorOp, c=carry3, sum=out[4], carry=carry4);
+    FullAdder(a=a[5], b=b5XorOp, c=carry4, sum=out[5], carry=carry5);
+    FullAdder(a=a[6], b=b6XorOp, c=carry5, sum=out[6], carry=carry6);
+    FullAdder(a=a[7], b=b7XorOp, c=carry6, sum=out[7], carry=carry7);
+    FullAdder(a=a[8], b=b8XorOp, c=carry7, sum=out[8], carry=carry8);
+    FullAdder(a=a[9], b=b9XorOp, c=carry8, sum=out[9], carry=carry9);
+    FullAdder(a=a[10], b=b10XorOp, c=carry9, sum=out[10], carry=carry10);
+    FullAdder(a=a[11], b=b11XorOp, c=carry10, sum=out[11], carry=carry11);
+    FullAdder(a=a[12], b=b12XorOp, c=carry11, sum=out[12], carry=carry12);
+    FullAdder(a=a[13], b=b13XorOp, c=carry12, sum=out[13], carry=carry13);
+    FullAdder(a=a[14], b=b14XorOp, c=carry13, sum=out[14], carry=carry14);
+    FullAdder(a=a[15], b=b15XorOp, c=carry14, sum=out[15], carry=carry15);
+}

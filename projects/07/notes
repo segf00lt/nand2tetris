@@ -1,0 +1,91 @@
+Binary and unary operate on values in the stack.
+Push and pop take 2 arguments: a virtual memory segment and
+an index in that segment.
+Flow control commands take symbolic names as arguments
+General purpose memory is in the range 0x10-0x3FFF
+Function declarations compile to assembly labels, but the
+number of locals they are declared with is kept 
+
+BINARY
+add
+sub
+and
+or
+eq
+gt
+lt
+
+
+pop 2 from stack and do binop
+this is the same pattern for all binary ops, unary ops are a little smaller
+
+binary op:
+@SP
+D=M-1
+M=D
+A=D-1
+D=M
+@SP
+A=M
+D=D "OP" M
+@SP
+A=M-1
+M=D
+D=A+1
+@SP
+M=D
+
+unary op:
+@SP
+A=M
+M="OP" M
+
+the most common case for a compare op is something like
+eq
+if-goto LABEL
+
+
+compare op (common):
+@SP
+A=M-1
+A=M-1
+D=M
+@SP
+A=M-1
+D=D-M
+@SP
+M=M+1
+(if eq):
+A=M
+M=!D (this should put a 1 on top of the stack if the compare was successful)
+(if gt):
+
+UNARY
+neg
+not
+
+MEMORY
+push segment index
+pop segment index
+
+FLOW CONTROL
+label symbol
+goto symbol
+if-goto symbol (probably pop's a value off the stack and branches if TRUE)
+
+FUNCTIONS
+function funcname nlocals
+call funcname nargs
+return (jump to return address)
+
+SEGMENTS
+argument (heap address stored in RAM[0])
+local (heap address stored in RAM[1])
+this (heap address stored in RAM[2])
+that (heap address stored in RAM[3])
+temp (fixed segment at RAM[5..12])
+pointer (base address of this/that in heap I.E. is *this)
+static (all static variables shared by functions in the same file)
+
+PSEUDO-SEGMENTS
+constant

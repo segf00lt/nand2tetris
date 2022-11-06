@@ -1,0 +1,22 @@
+CHIP Zero16 {
+	IN in[16], flag;
+	OUT out[16];
+	PARTS:
+	Not(in=flag, out=nflag);
+	And(a=in[0], b=nflag, out=out[0]);
+	And(a=in[1], b=nflag, out=out[1]);
+	And(a=in[2], b=nflag, out=out[2]);
+	And(a=in[3], b=nflag, out=out[3]);
+	And(a=in[4], b=nflag, out=out[4]);
+	And(a=in[5], b=nflag, out=out[5]);
+	And(a=in[6], b=nflag, out=out[6]);
+	And(a=in[7], b=nflag, out=out[7]);
+	And(a=in[8], b=nflag, out=out[8]);
+	And(a=in[9], b=nflag, out=out[9]);
+	And(a=in[10], b=nflag, out=out[10]);
+	And(a=in[11], b=nflag, out=out[11]);
+	And(a=in[12], b=nflag, out=out[12]);
+	And(a=in[13], b=nflag, out=out[13]);
+	And(a=in[14], b=nflag, out=out[14]);
+	And(a=in[15], b=nflag, out=out[15]);
+}

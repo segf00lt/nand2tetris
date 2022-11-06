@@ -1,0 +1,89 @@
+output of A reg is connected to memory
+
+NOTE INSTRUCTIONS ARE LITTLE ENDIAN!!!!!
+A inst
+0 vvvvvvvvvvvvvvv
+
+the v bits are a 15 bit constant
+this A instruction sets the value of the A register to the constant
+
+C inst
+111 a cccccc d1 d2 d3 jjj
+
+a bit selects between the value of the A register and the value at the
+memory address stored in the A register
+c bits are passed directly to the control pins of the ALU (zx,nx,zy,ny,f,no)
+d bits determine the destination of an ALU op
+- 001 enables the load for M, writeM=1 (I.E. the memory address stored in A)
+- 010 enables the load for D
+- 100 enables the load for A (the register itself)
+- 000 disables the previous 3
+
+the A register is wired directly to the PC input bus
+
+D is wired to the ALU x bus
+the MUX of A and M (RAM[A] or *A) is wired to the ALU y bus
+the ALU out bus is wired to the Memory in bus, the D in bus and the A in bus
+
+A is wired to the Memory address bus
+
+d3 is wired to the Memory load pin
+d2 is wired to the D register load pin
+d1 is wired to the A register load pin
+
+ALU output pins
+zr = 1 if out = 0
+ng = 1 if out < 0
+
+j bits
+- 000 no jump, false
+- 001 JGT, zr=0 and ng=0, ~zr & ~ng
+- 010 JEQ, zr=1 and ng=0, zr & ~ng
+- 011 JGE, (zr=0 or zr=1) and ng=0, ~ng
+- 100 JLT, zr=0 and ng=1, ~zr & ng
+- 101 JNE, zr=0 and (ng=0 or ng=1), ~zr
+- 110 JLE, zr=1 xor ng=1, zr | ng (we can just do or because zr and ng will never be 1 at the same time) 
+- 111 JMP, unconditional jump, true
+
+we probably need a Mux8Way
+
+CHIP Mux8Way {
+	IN a, b, c, d, e, f, g, h, sel[3];
+	OUT out;
+	PARTS:
+	Mux(a=a, b=b, sel=sel[0], out=aMuxb);
+	Mux(a=c, b=d, sel=sel[0], out=cMuxd);
+	Mux(a=e, b=f, sel=sel[0], out=eMuxf);
+	Mux(a=g, b=h, sel=sel[0], out=gMuxh);
+	Mux(a=aMuxb, b=cMuxd, sel=sel[1], out=aMuxbMuxcMuxd);
+	Mux(a=eMuxf, b=gMuxh, sel=sel[1], out=eMuxfMuxgMuxh);
+	Mux(a=aMuxbMuxcMuxd, b=eMuxfMuxgMuxh, sel=sel[2], out=out);
+}
+
+a and h will be permanently set to true and false respectively
+
+CHIP CMP { // compare the ALU output with 0
+	IN zr, ng, f[3];
+	OUT out;
+	PARTS:
+	And(a=Notzr, b=Notng, out=JGT);
+	And(a=zr, b=Notng, out=JEQ);
+	Not(in=ng, out=Notng, out=JGE);
+	And(a=Notzr, b=ng, out=JLT);
+	Not(in=zr, out=Notzr, out=JNE);
+	Or(a=zr, b=ng, out=JLE);
+	Mux(a=false, b=JGT, sel=f[0], out=aMuxb);
+	Mux(a=JEQ, b=JGE, sel=f[0], out=cMuxd);
+	Mux(a=JLT, b=JNE, sel=f[0], out=eMuxf);
+	Mux(a=JLE, b=true, sel=f[0], out=gMuxh);
+	Mux(a=aMuxb, b=cMuxd, sel=f[1], out=aMuxbMuxcMuxd);
+	Mux(a=eMuxf, b=gMuxh, sel=f[1], out=eMuxfMuxgMuxh);
+	Mux(a=aMuxbMuxcMuxd, b=eMuxfMuxgMuxh, sel=f[2], out=out);
+}
+
+the zr and ng ALU outputs are wired to the zr and ng CMP inputs
+the j field is wired to the CMP f bus
+the output from CMP sets the PC load bit
+
+
+Aload = 1 if d1=1 or instruction is A type
