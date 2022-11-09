@@ -20,7 +20,9 @@ M=D
 @SP
 M=M+1
 @StaticTest.vm.8
-D=M
+D=A
+@R15
+M=D
 @SP
 M=M-1
 A=M
@@ -29,7 +31,9 @@ D=M
 A=M
 M=D
 @StaticTest.vm.3
-D=M
+D=A
+@R15
+M=D
 @SP
 M=M-1
 A=M
@@ -38,7 +42,9 @@ D=M
 A=M
 M=D
 @StaticTest.vm.1
-D=M
+D=A
+@R15
+M=D
 @SP
 M=M-1
 A=M

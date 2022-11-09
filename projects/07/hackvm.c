@@ -113,10 +113,10 @@ int lex(char *text, char **curtoken) {
 		check = isdigit(*s);
 	if(check) return NUM;
 
-	if(!(isalpha(*tp) || *tp == '_')) return ILLEGAL;
+	if(!(isalpha(*tp) || *tp == '_' || *tp == '.' || *tp == '$' || *tp == ':')) return ILLEGAL;
 
 	for(check = 1, s = tp; *s && check; ++s)
-		check = (isalnum(*s) || *s == '_' || *s == '.');
+		check = (isalnum(*s) || *s == '_' || *s == '.' || *tp == '$' || *tp == ':');
 	if(check) return ID;
 
 	return ILLEGAL;
@@ -150,6 +150,13 @@ Snode* parse(char *text) {
 			}
 			curnode = (Snode){ .cmd = t0, .arg1 = s1, .arg2 = s2 };
 			break;
+		case LABEL: case GOTO: case IFGOTO:
+			if((t1 = lex(0, &s1)) != ID) {
+				free(nodearr);
+				error(1, 0, "expected identifier as 1st arg to %s", s0);
+			}
+			curnode = (Snode){ .cmd = t0, .arg1 = s1 };
+			break;
 		case FUNC: case CALL:
 			if((t1 = lex(0, &s1)) != ID) {
 				free(nodearr);
@@ -160,13 +167,6 @@ Snode* parse(char *text) {
 				error(1, 0, "expected number as 2nd arg to %s", s0);
 			}
 			curnode = (Snode){ .cmd = t0, .arg1 = s1, .arg2 = s2 };
-			break;
-		case LABEL: case GOTO: case IFGOTO:
-			if((t1 = lex(0, &s1)) != ID) {
-				free(nodearr);
-				error(1, 0, "expected identifier as 1st arg to %s", s0);
-			}
-			curnode = (Snode){ .cmd = t0, .arg1 = s1 };
 			break;
 		}
 
@@ -194,10 +194,12 @@ void debug_parsed(Snode *nodes) {
 void compile(char *fname, char *text, FILE *dest) {
 	char c;
 	char *s;
+	char curfunc[128] = "null";
 	char binoptab[] = {'+', '-', '&', '|'};
 	char unoptab[] = {'-', '!'};
 	char *cmpoptab[] = {"JEQ", "JGT", "JLT"};
 	unsigned int compcount = 0;
+	unsigned int callcount = 0;
 	Snode *syntaxarr = parse(text);
 	Snode *nodes = syntaxarr;
 	debug_parsed(syntaxarr);
@@ -219,9 +221,11 @@ void compile(char *fname, char *text, FILE *dest) {
 			fprintf(dest, "@SP\nA=M-1\nD=M\nA=A-1\nD=M-D\nM=-1\n@SP\nM=M-1\n");
 
 			/* TODO optimize chained comparison? */
+			/* NOTE is this optimization really common? */
 			/* common case optimization */
 			if(nodes[1].cmd == IFGOTO) {
 				++nodes;
+				fprintf(stderr, "optimization\n");
 				fprintf(dest, "@%s\nD;%s\n@SP\nA=M-1\nM=0\n", nodes->arg1, s);
 				break;
 			}
@@ -246,7 +250,7 @@ void compile(char *fname, char *text, FILE *dest) {
 				fprintf(dest, "@%s\nD=A\n@R5\nA=A+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "pointer")) {
 				/* R13-14 */
-				fprintf(dest, "@%s\nD=A\n@R13\nA=A+D\nD=M\n", cur.arg2);
+				fprintf(dest, "@%s\nD=A\n@THIS\nA=A+D\nD=M\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "static")) {
 				fprintf(dest, "@%s.%s\nD=M\n", fname, cur.arg2);
 			}
@@ -269,17 +273,57 @@ void compile(char *fname, char *text, FILE *dest) {
 				/* R5-12 */
 				fprintf(dest, "@%s\nD=A\n@R5\nD=A+D\n@R15\nM=D\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "pointer")) {
-				/* TODO broken
-				 * this that are probably broken too
-				 */
-				/* R13-14 */
-				fprintf(dest, "@%s\nD=A\n@R13\nD=A+D\n@R15\nM=D\n", cur.arg2);
+				/* address of R3 and R4 */
+				fprintf(dest, "@%s\nD=A\n@THIS\nD=A+D\n@R15\nM=D\n", cur.arg2);
 			} else if(!strcmp(cur.arg1, "static")) {
-				/* TODO broken */
-				fprintf(dest, "@%s.%s\nD=M\n", fname, cur.arg2);
+				fprintf(dest, "@%s.%s\nD=A\n@R15\nM=D\n", fname, cur.arg2);
 			}
 
 			fprintf(dest, "@SP\nM=M-1\nA=M\nD=M\n@R15\nA=M\nM=D\n");
+			break;
+		case LABEL:
+			fprintf(dest, "(%s.%s$%s)\n", fname, curfunc, cur.arg1);
+			break;
+		case GOTO:
+			fprintf(dest, "@%s.%s$%s\n0;JMP\n", fname, curfunc, cur.arg1);
+			break;
+		case IFGOTO:
+			fprintf(dest, "@SP\nM=M-1\nA=M\nD=M\n@%s.%s$%s\nD;JNE\n", fname, curfunc, cur.arg1);
+			break;
+		case FUNC:
+			/* nested function declarations are not allowed */
+			sprintf(curfunc, "%s", cur.arg1);
+			fprintf(dest, "(%s.%s)\n@0\nD=A\n", fname, curfunc);
+			for(int k = atoi(cur.arg2), i = 0; i < k; ++i)
+				fprintf(dest, "@SP\nA=M\nM=D\n@SP\nM=M+1\n");
+			break;
+		case CALL:
+			fprintf(dest, "@%s.%s$%s_return_%i\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
+					fname, curfunc, cur.arg1, callcount);
+			fprintf(dest,
+					"@LCL\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+					"@ARG\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+					"@THIS\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+					"@THAT\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+					"@SP\nD=A\n@%s\nD=D-A\n@5\nD=D-A\n@ARG\nM=D\n"
+					"@SP\nD=M\n@LCL\nM=D\n"
+					"@%s.%s\n0;JMP\n"
+					"(%s.%s$%s_return_%i)\n",
+					cur.arg2, fname, cur.arg1, fname, curfunc, cur.arg1, callcount);
+			++callcount;
+			break;
+		case RET:
+			strcpy(curfunc, "null");
+			fprintf(dest,
+					"@LCL\nD=M\n@R5\nM=D\n"
+					"@5\nA=D-A\nD=M\n@R6\nM=D\n"
+					"@SP\nA=M-1\nD=M\n@ARG\nA=M\nM=D\n"
+					"@ARG\nD=M+1\n@SP\nM=D\n"
+					"@R5\nM=M-1\nA=M\nD=M\n@THAT\nM=D\n"
+					"@R5\nM=M-1\nA=M\nD=M\n@THIS\nM=D\n"
+					"@R5\nM=M-1\nA=M\nD=M\n@ARG\nM=D\n"
+					"@R5\nM=M-1\nA=M\nD=M\n@LCL\nM=D\n"
+					"@R6\nA=M\n0;JMP\n");
 			break;
 		}
 	}
@@ -287,6 +331,7 @@ void compile(char *fname, char *text, FILE *dest) {
 	free(syntaxarr);
 }
 
+/* TODO if input file is directory compile all .vm files in dir to single output file */
 int main(int argc, char *argv[]) {
 	Fmap fm;
 	FILE *dest;
