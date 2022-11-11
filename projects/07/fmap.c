@@ -1,6 +1,5 @@
 typedef struct {
 	int fd;
-	char name[4096]; // should this be array or pointer?
 	char *buf;
 	size_t size;
 } Fmap;
@@ -10,7 +9,15 @@ int fmapopen(char *name, int perms, Fmap *mp) {
 
 	*mp = (Fmap){0};
 	mp->fd = open(name, perms);
-	strcpy(mp->name, name);
+
+	return 1;
+}
+
+int fmapfdopen(int fd, Fmap *mp) {
+	if(!mp) return 0;
+
+	*mp = (Fmap){0};
+	mp->fd = fd;
 
 	return 1;
 }

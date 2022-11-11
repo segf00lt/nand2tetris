@@ -5,6 +5,7 @@
 #include <error.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <dirent.h>
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -29,7 +30,6 @@ enum TOKENS {
 };
 
 char *TOKEN_DBG[] = {
-	"",
 	"ADD", "SUB", "AND", "OR",
 	"NEG", "NOT",
 	"EQ", "GT", "LT",
@@ -186,9 +186,24 @@ Snode* parse(char *text) {
 void debug_parsed(Snode *nodes) {
 	for(int i = 1; nodes->cmd != 0; ++i, ++nodes) {
 		fprintf(stderr, "Snode %i:\n\tcmd: %s\n\targ1: %s\n\targ2: %s\n", i,
-				TOKEN_DBG[nodes->cmd], nodes->arg1 ? nodes->arg1 : "",
+				TOKEN_DBG[nodes->cmd-1], nodes->arg1 ? nodes->arg1 : "",
 				nodes->arg2 ? nodes->arg2 : "");
 	}
+}
+
+void init(char *destname, FILE *dest) {
+	fprintf(dest,
+			"@256\nD=A\n@SP\nM=D\n"
+			"@%s.RET_0\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+			"@LCL\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+			"@ARG\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+			"@THIS\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+			"@THAT\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
+			"@SP\nD=M\n@5\nD=D-A\n@ARG\nM=D\n" // is this necessary?
+			"@SP\nD=M\n@LCL\nM=D\n"
+			"@Sys.init\n0;JMP\n"
+			"(%s.RET_0)\n",
+			destname, destname);
 }
 
 void compile(char *fname, char *text, FILE *dest) {
@@ -199,12 +214,10 @@ void compile(char *fname, char *text, FILE *dest) {
 	char unoptab[] = {'-', '!'};
 	char *cmpoptab[] = {"JEQ", "JGT", "JLT"};
 	unsigned int compcount = 0;
-	unsigned int callcount = 0;
+	unsigned int callcount = 1;
 	Snode *syntaxarr = parse(text);
 	Snode *nodes = syntaxarr;
 	debug_parsed(syntaxarr);
-
-	/* TODO output preamble code to init memory segments */
 
 	for(Snode cur = *nodes; cur.cmd; cur = *++nodes) {
 		switch(cur.cmd) {
@@ -220,16 +233,6 @@ void compile(char *fname, char *text, FILE *dest) {
 			s = cmpoptab[cur.cmd - EQ];
 			fprintf(dest, "@SP\nA=M-1\nD=M\nA=A-1\nD=M-D\nM=-1\n@SP\nM=M-1\n");
 
-			/* TODO optimize chained comparison? */
-			/* NOTE is this optimization really common? */
-			/* common case optimization */
-			if(nodes[1].cmd == IFGOTO) {
-				++nodes;
-				fprintf(stderr, "optimization\n");
-				fprintf(dest, "@%s\nD;%s\n@SP\nA=M-1\nM=0\n", nodes->arg1, s);
-				break;
-			}
-			
 			fprintf(dest, "@%s.TRUE_COMPARISON_%i\nD;%s\n@SP\nA=M-1\nM=0\n(%s.TRUE_COMPARISON_%i)\n",
 					fname, compcount, s, fname, compcount);
 			++compcount;
@@ -282,38 +285,36 @@ void compile(char *fname, char *text, FILE *dest) {
 			fprintf(dest, "@SP\nM=M-1\nA=M\nD=M\n@R15\nA=M\nM=D\n");
 			break;
 		case LABEL:
-			fprintf(dest, "(%s.%s$%s)\n", fname, curfunc, cur.arg1);
+			fprintf(dest, "(%s$%s)\n", curfunc, cur.arg1);
 			break;
 		case GOTO:
-			fprintf(dest, "@%s.%s$%s\n0;JMP\n", fname, curfunc, cur.arg1);
+			fprintf(dest, "@%s$%s\n0;JMP\n", curfunc, cur.arg1);
 			break;
 		case IFGOTO:
-			fprintf(dest, "@SP\nM=M-1\nA=M\nD=M\n@%s.%s$%s\nD;JNE\n", fname, curfunc, cur.arg1);
+			fprintf(dest, "@SP\nM=M-1\nA=M\nD=M\n@%s$%s\nD;JNE\n", curfunc, cur.arg1);
 			break;
 		case FUNC:
 			/* nested function declarations are not allowed */
 			sprintf(curfunc, "%s", cur.arg1);
-			fprintf(dest, "(%s.%s)\n@0\nD=A\n", fname, curfunc);
+			fprintf(dest, "(%s)\n@0\nD=A\n", curfunc);
 			for(int k = atoi(cur.arg2), i = 0; i < k; ++i)
 				fprintf(dest, "@SP\nA=M\nM=D\n@SP\nM=M+1\n");
 			break;
 		case CALL:
-			fprintf(dest, "@%s.%s$%s_return_%i\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n",
-					fname, curfunc, cur.arg1, callcount);
 			fprintf(dest,
+					"@%s.RET_%i\nD=A\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
 					"@LCL\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
 					"@ARG\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
 					"@THIS\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
 					"@THAT\nD=M\n@SP\nA=M\nM=D\n@SP\nM=M+1\n"
-					"@SP\nD=A\n@%s\nD=D-A\n@5\nD=D-A\n@ARG\nM=D\n"
+					"@SP\nD=M\n@%s\nD=D-A\n@5\nD=D-A\n@ARG\nM=D\n"
 					"@SP\nD=M\n@LCL\nM=D\n"
-					"@%s.%s\n0;JMP\n"
-					"(%s.%s$%s_return_%i)\n",
-					cur.arg2, fname, cur.arg1, fname, curfunc, cur.arg1, callcount);
+					"@%s\n0;JMP\n"
+					"(%s.RET_%i)\n",
+					fname, callcount, cur.arg2, cur.arg1, fname, callcount);
 			++callcount;
 			break;
 		case RET:
-			strcpy(curfunc, "null");
 			fprintf(dest,
 					"@LCL\nD=M\n@R5\nM=D\n"
 					"@5\nA=D-A\nD=M\n@R6\nM=D\n"
@@ -331,15 +332,58 @@ void compile(char *fname, char *text, FILE *dest) {
 	free(syntaxarr);
 }
 
-/* TODO if input file is directory compile all .vm files in dir to single output file */
 int main(int argc, char *argv[]) {
 	Fmap fm;
+	char path[256];
+	char *base;
+	char *ptr;
 	FILE *dest;
-	fmapopen(argv[1], O_RDONLY, &fm);
+	DIR *dp;
+	struct dirent *ent;
+	struct stat status;
+	int fd = open(argv[1], O_RDONLY);
+	fstat(fd, &status);
 	dest = fopen(argv[2], "w");
-	fmapread(&fm);
-	compile(basename(fm.name), fm.buf, dest);
-	fmapclose(&fm);
+	char srcname[128];
+	char destname[128];
+
+	strcpy(srcname, basename(argv[1]));
+	if((ptr = strstr(srcname, ".vm")))
+		*ptr = 0;
+	strcpy(destname, basename(argv[2]));
+	if((ptr = strstr(destname, ".asm")))
+		*ptr = 0;
+
+	init(destname, dest);
+
+	if(!S_ISDIR(status.st_mode)) {
+		fmapfdopen(fd, &fm);
+		fmapread(&fm);
+		compile(srcname, fm.buf, dest);
+		fmapclose(&fm);
+		fclose(dest);
+		return 0;
+	}
+
+	dp = fdopendir(fd);
+	strcpy(path, argv[1]);
+	if(!strchr(path, '/'))
+		strcat(path, "/");
+	base = path + strlen(path);
+
+	while((ent = readdir(dp)) != 0) {
+		strcpy(base, ent->d_name);
+		strcpy(srcname, ent->d_name);
+		if(!(ptr = strstr(srcname, ".vm")))
+			continue;
+		*ptr = 0;
+		fmapopen(path, O_RDONLY, &fm);
+		fmapread(&fm);
+		compile(srcname, fm.buf, dest);
+		fmapclose(&fm);
+	}
+
 	fclose(dest);
+	closedir(dp);
 	return 0;
 }
