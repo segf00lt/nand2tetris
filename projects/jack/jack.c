@@ -220,10 +220,6 @@ int lex(void) {
  * 
  * generate AST!!!!!!!
  *
- * NOTE allocate sybmols in an arena
- * maybe store them in the symbol table immediately
- * and avoid allocating the same string twice?
- *
  * cleanup (I dunno figure it out)
  */
 
@@ -631,7 +627,7 @@ int term(void) {
 	case TRUE: case FALSE: case NUL: case THIS:
 		PARSER_PRINT(parser.depth, "<term>\n");
 		++parser.depth;
-		PARSER_PRINT(parser.depth, "<keywordConstant> %s </keywordConstant>\n",keyword[lexer.token-CLASS]);
+		PARSER_PRINT(parser.depth, "<keyword> %s </keyword>\n",keyword[lexer.token-CLASS]);
 		break;
 	case ID:
 		PARSER_PRINT(parser.depth, "<term>\n");
@@ -691,8 +687,8 @@ int term(void) {
 void subroutineCall(void) {
 	if(lex() != ID)
 		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
-	//PARSER_PRINT(parser.depth, "<subroutineCall>\n");
-	//++parser.depth;
+	PARSER_PRINT(parser.depth, "<subroutineCall>\n");
+	++parser.depth;
 	PARSER_PRINT(parser.depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
@@ -717,8 +713,8 @@ void subroutineCall(void) {
 		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	PARSER_PRINT(parser.depth, "<symbol> ) </symbol>\n");
 
-	//--parser.depth;
-	//PARSER_PRINT(parser.depth, "</subroutineCall>\n");
+	--parser.depth;
+	PARSER_PRINT(parser.depth, "</subroutineCall>\n");
 }
 
 void expressionList(void) {
@@ -782,6 +778,7 @@ void parameterList(void) {
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 	}
+	lexer.ptr = lexer.unget;
 }
 
 /*
@@ -875,47 +872,12 @@ void parse(void) {
 	//	class();
 }
 
-void debug_lex(char *text) {
-	int t;
-
-	lex();
-
-	printf("<tokens>\n");
-	while((t = lex()) != END && t != ILLEGAL) {
-		switch(t) {
-		case KEYWORD:
-			printf("<keyword> %s </keyword>\n", keyword[lexer.token - CLASS]);
-			break;
-		case SYMBOL:
-			if(lexer.token == '<')
-				printf("<symbol> &lt; </symbol>\n");
-			if(lexer.token == '>')
-				printf("<symbol> &gt; </symbol>\n");
-			printf("<symbol> %c </symbol>\n", lexer.token);
-			break;
-		case NUMBER:
-			//printf("<integerConstant> %s </integerConstant>\n", lexer.text);
-			//free(lexer.text);
-			break;
-		case STRING:
-			//printf("<stringConstant> %s </stringConstant>\n", lexer.text);
-			//free(lexer.text);
-			break;
-		case ID:
-			//printf("<identifier> %s </identifier>\n", lexer.text);
-			//free(lexer.text);
-			break;
-		}
-	}
-	printf("</tokens>\n");
-}
-
 void debug_parse(AST_node *ast) {
 }
 
-int main(void) {
+int main(int argc, char *argv[]) {
 	atexit(cleanup);
-	fmapopen("test/Main.jack", O_RDONLY, &fm);
+	fmapopen(argv[1], O_RDONLY, &fm);
 	fmapread(&fm);
 	lexer.src = fm.buf;
 	lexer.ptr = 0;
