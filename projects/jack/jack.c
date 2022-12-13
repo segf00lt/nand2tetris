@@ -234,39 +234,6 @@ void expression(void);
 int term(void);
 void variableDeclaration(void);
 
-/* used in classVarDec and varDec */
-void variableDeclaration(void) {
-	lex();
-	if(lexer.token ==T_INT || lexer.token == T_CHAR || lexer.token == T_BOOL) { /* builtin type */
-		PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
-	} else if(lexer.token == T_ID) { /* class type */
-		PARSER_PRINT(depth, "<identifier> ");
-		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
-		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
-	} else
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
-
-	if(lex() != T_ID)
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<identifier> ");
-	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
-	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
-
-	while(lex() == ',') {
-		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
-
-		if(lex() != T_ID)
-			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
-		PARSER_PRINT(depth, "<identifier> ");
-		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
-		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
-	}
-
-	if(lexer.token != ';')
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
-}
-
 int class(void) {
 	if(lex() != T_CLASS)
 		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
