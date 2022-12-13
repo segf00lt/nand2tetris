@@ -83,7 +83,8 @@ typedef struct syntax_node {
 typedef struct {
 	char *src;
 	char *ptr;
-	char *text;
+	char *text_s;
+	char *text_e;
 	char *unget;
 	int token;
 } Lexer;
@@ -121,41 +122,38 @@ AST_node* alloc_node(int type, char *text, AST_node *left, AST_node *right) {
 }
 
 void cleanup(void) {
-	if(lexer.text)
-		free(lexer.text);
 	fmapclose(&fm);
 }
 
 int lex(void) {
 	char *tp, *s;
 	int check;
-	int tmp;
 
 	if(!lexer.ptr) {
 		lexer.ptr = lexer.src;
-		char *s = lexer.src;
-		char *w = s;
+		char *r = lexer.src;
+		char *w = r;
 
-		while(*s) {
-			if(s[0] == '/' && s[1] == '/') { /* single-line comments */
-				while(*s != '\n') ++s;
-				++s;
-			} else if(s[0] == '/' && s[1] == '*') { /* multi-line and doc comments */
-				if(s[2] == '*')
-					s += 3;
+		while(*r) {
+			if(r[0] == '/' && r[1] == '/') { /* single-line comments */
+				while(*r != '\n') ++r;
+				++r;
+			} else if(r[0] == '/' && r[1] == '*') { /* multi-line and doc comments */
+				if(r[2] == '*')
+					r += 3;
 				else
-					s += 2;
-				while(!(s[0] == '*' && s[1] == '/')) ++s;
-				s += 2;
-			} else if(s != lexer.ptr && isspace(*(s-1)) && isspace(*s)) {
-				while(isspace(*s)) ++s; /* delete empty lines */
-			} else if(w == lexer.ptr && isspace(*s)) {
-				while(isspace(*s)) ++s;
-			} else if(isspace(*s)) {
+					r += 2;
+				while(!(r[0] == '*' && r[1] == '/')) ++r;
+				r += 2;
+			} else if(r != lexer.ptr && isspace(*(r-1)) && isspace(*r)) {
+				while(isspace(*r)) ++r; /* delete empty lines */
+			} else if(w == lexer.ptr && isspace(*r)) {
+				while(isspace(*r)) ++r;
+			} else if(isspace(*r)) {
 				*w++ = ' ';
-				while(isspace(*s)) ++s;
+				while(isspace(*r)) ++r;
 			} else
-				*w++ = *s++;
+				*w++ = *r++;
 		}
 		*w = 0;
 
@@ -168,7 +166,7 @@ int lex(void) {
 	if(*lexer.ptr == 0)
 		return END;
 
-	lexer.text = 0;
+	lexer.text_s = lexer.text_e = 0;
 	lexer.token = 0;
 
 	/* symbol */
@@ -194,11 +192,8 @@ int lex(void) {
 	for(check = 0, s = tp; *s && isdigit(*s); ++s)
 		++check;
 	if(check) {
-		tmp = *s;
-		*s = 0;
-		lexer.text = strdup(tp);
-		*s = tmp;
-		lexer.ptr = s;
+		lexer.text_s = tp;
+		lexer.text_e = lexer.ptr = s;
 		return (lexer.token = NUMBER);
 	}
 
@@ -206,9 +201,8 @@ int lex(void) {
 		for(s = tp + 1; (check = *s) && *s != '"'; ++s);
 		if(!check)
 			error(1, 0, "mismatched quotes");
-		*s = 0;
-		lexer.text = strdup(tp + 1);
-		*s = '"';
+		lexer.text_s = tp + 1;
+		lexer.text_e = s - 1;
 		lexer.ptr = s + 1;
 		return (lexer.token = STRING);
 	}
@@ -217,16 +211,14 @@ int lex(void) {
 
 	for(s = tp; *s && (isalnum(*s) || *s == '_'); ++s);
 
-	tmp = *s;
-	*s = 0;
-	lexer.text = strdup(tp);
-	*s = tmp;
-	lexer.ptr = s;
+	lexer.text_s = tp;
+	lexer.text_e = lexer.ptr = s;
 	return (lexer.token = ID);
 }
 
 /* TODO
- * write parser
+ * 
+ * generate AST!!!!!!!
  *
  * refactor ID, NUMBER and STRING alloc
  *
@@ -270,11 +262,11 @@ int lex(void) {
 #define PARSER_PRINT(indent, fmt, ...) { \
 	register unsigned int i = indent; \
 	while(i > 0) { \
-		putchar(' '); \
-		putchar(' '); \
+		putc(' ', stderr); \
+		putc(' ', stderr); \
 		--i; \
 	} \
-	printf(fmt, ##__VA_ARGS__); \
+	fprintf(stderr, fmt, ##__VA_ARGS__); \
 }
 
 int class(void);
@@ -301,23 +293,26 @@ void variableDeclaration(void) {
 	if(lexer.token == INT || lexer.token == CHAR || lexer.token == BOOL) { /* builtin type */
 		PARSER_PRINT(parser.depth, "<keyword> %s </keyword>\n", keyword[lexer.token - CLASS]);
 	} else if(lexer.token == ID) { /* class type */
-		PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<identifier> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 	} else
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
 
 	if(lex() != ID)
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-	PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-	free(lexer.text);
+	PARSER_PRINT(parser.depth, "<identifier> ");
+	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 
 	while(lex() == ',') {
 		PARSER_PRINT(parser.depth, "<symbol> %c </symbol>\n", lexer.token);
 
 		if(lex() != ID)
 			error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-		PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<identifier> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 	}
 
 	if(lexer.token != ';')
@@ -334,8 +329,9 @@ int class(void) {
 
 	if(lex() != ID)
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-	PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-	free(lexer.text);
+	PARSER_PRINT(parser.depth, "<identifier> ");
+	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 
 	if(lex() != '{')
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
@@ -379,10 +375,6 @@ void subroutineBody(void) {
 
 int varDec(void) {
 	if(lex() != VAR) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
 		lexer.ptr = lexer.unget;
 		return 0;
 	}
@@ -418,10 +410,6 @@ void statements(void) {
 
 int letStatement(void) {
 	if(lex() != LET) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
 		lexer.ptr = lexer.unget;
 		return 0;
 	}
@@ -431,8 +419,9 @@ int letStatement(void) {
 
 	if(lex() != ID)
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-	PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-	free(lexer.text);
+	PARSER_PRINT(parser.depth, "<identifier> ");
+	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 
 	if(lex() != '[') {
 		lexer.ptr = lexer.unget;
@@ -461,10 +450,6 @@ int letStatement(void) {
 
 int ifStatement(void) {
 	if(lex() != IF) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
 		lexer.ptr = lexer.unget;
 		return 0;
 	}
@@ -504,13 +489,8 @@ int ifStatement(void) {
 		if(lex() != '}')
 			error(1, 0, "parser error in %s line %d", __func__, __LINE__);
 		PARSER_PRINT(parser.depth, "<symbol> '}' </symbol>\n");
-	} else {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
+	} else
 		lexer.ptr = lexer.unget;
-	}
 
 	--parser.depth;
 	PARSER_PRINT(parser.depth, "</ifStatement>\n");
@@ -519,10 +499,6 @@ int ifStatement(void) {
 
 int whileStatement(void) {
 	if(lex() != WHILE) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
 		lexer.ptr = lexer.unget;
 		return 0;
 	}
@@ -557,10 +533,6 @@ int whileStatement(void) {
 
 int doStatement(void) {
 	if(lex() != DO) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
 		lexer.ptr = lexer.unget;
 		return 0;
 	}
@@ -581,10 +553,6 @@ int doStatement(void) {
 
 int returnStatement(void) {
 	if(lex() != RETURN) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
 		lexer.ptr = lexer.unget;
 		return 0;
 	}
@@ -597,13 +565,8 @@ int returnStatement(void) {
 		--parser.depth;
 		PARSER_PRINT(parser.depth, "</returnStatement>\n");
 		return 1;
-	} else {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
+	} else
 		lexer.ptr = lexer.unget;
-	}
 
 	expression();
 
@@ -630,10 +593,6 @@ void expression(void) {
 				lexer.token != '*' && lexer.token != '/' &&
 				lexer.token != '&' && lexer.token != '|' &&
 				lexer.token != '<' && lexer.token != '>' && lexer.token != '=') {
-			if(lexer.text) {
-				free(lexer.text);
-				lexer.text = 0;
-			}
 			lexer.ptr = lexer.unget;
 			lexer.token = 0;
 			break;
@@ -648,7 +607,7 @@ void expression(void) {
 }
 
 int term(void) {
-	register char *tmp1, *tmp2;
+	register char *tmp1, *tmp2, *tmp3;
 
 	if(lex() == END)
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
@@ -657,14 +616,16 @@ int term(void) {
 	case NUMBER:
 		PARSER_PRINT(parser.depth, "<term>\n");
 		++parser.depth;
-		PARSER_PRINT(parser.depth, "<integerConstant> %s </integerConstant>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<integerConstant> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </integerConstant>\n", 1, STRLEN(" </integerConstant>\n"), stderr);
 		break;
 	case STRING:
 		PARSER_PRINT(parser.depth, "<term>\n");
 		++parser.depth;
-		PARSER_PRINT(parser.depth, "<stringConstant> %s </stringConstant>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<stringConstant> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </stringConstant>\n", 1, STRLEN(" </stringConstant>\n"), stderr);
 		break;
 	case TRUE: case FALSE: case NUL: case THIS:
 		PARSER_PRINT(parser.depth, "<term>\n");
@@ -675,19 +636,19 @@ int term(void) {
 		PARSER_PRINT(parser.depth, "<term>\n");
 		++parser.depth;
 		tmp1 = lexer.unget;
-		tmp2 = lexer.text;
+		tmp2 = lexer.text_s;
+		tmp3 = lexer.text_e;
 		lex();
 
 		if(lexer.token == '(' || lexer.token == '.') {
 			lexer.ptr = tmp1;
-			lexer.text = 0;
-			free(tmp2);
 			subroutineCall();
 			break;
 		}
 
-		PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", tmp2);
-		free(tmp2);
+		PARSER_PRINT(parser.depth, "<identifier> ");
+		fwrite(tmp2, 1, tmp3 - tmp2, stderr);
+		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 
 		if(lexer.token != '[') {
 			lexer.ptr = lexer.unget;
@@ -731,8 +692,9 @@ void subroutineCall(void) {
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
 	PARSER_PRINT(parser.depth, "<subroutineCall>\n");
 	++parser.depth;
-	PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-	free(lexer.text);
+	PARSER_PRINT(parser.depth, "<identifier> ");
+	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 
 	if(lex() != '.') {
 		lexer.ptr = lexer.unget;
@@ -741,8 +703,9 @@ void subroutineCall(void) {
 		PARSER_PRINT(parser.depth, "<symbol> . </symbol>\n");
 		if(lex() != ID)
 			error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-		PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<identifier> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 	}
 
 	if(lex() != '(')
@@ -780,8 +743,9 @@ void expressionList(void) {
 void parameterList(void) {
 	/* type */
 	if(lex() == ID) {
-		PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<identifier> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 	} else if(lexer.token >= INT && lexer.token <= VOID) {
 		PARSER_PRINT(parser.depth, "<keyword> %s </keyword>\n", keyword[lexer.token - CLASS]);
 	} else if(lexer.token == ')') { /* empty parameter list */
@@ -793,16 +757,18 @@ void parameterList(void) {
 	/* varName */
 	if(lex() != ID)
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-	PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-	free(lexer.text);
+	PARSER_PRINT(parser.depth, "<identifier> ");
+	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 
 	while(lex() == ',') {
 		PARSER_PRINT(parser.depth, "<symbol> %c </symbol>\n", lexer.token);
 
 		/* type */
 		if(lex() == ID) {
-			PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-			free(lexer.text);
+			PARSER_PRINT(parser.depth, "<identifier> ");
+			fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+			fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 		} else if(lexer.token >= INT && lexer.token <= VOID) {
 			PARSER_PRINT(parser.depth, "<keyword> %s </keyword>\n", keyword[lexer.token - CLASS]);
 		} else
@@ -811,8 +777,9 @@ void parameterList(void) {
 		/* varName */
 		if(lex() != ID)
 			error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-		PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<identifier> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 	}
 }
 
@@ -826,11 +793,7 @@ void parameterList(void) {
 int subroutineDec(void) {
 	lex();
 	if(lexer.token != CONSTRUCT && lexer.token != FUNC && lexer.token != METHOD) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
-		lexer.ptr = lexer.unget;
+				lexer.ptr = lexer.unget;
 		lexer.token = 0;
 		return 0;
 	}
@@ -842,8 +805,9 @@ int subroutineDec(void) {
 	/* return type */
 	lex();
 	if(lexer.token == ID) {
-		PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text);
-		free(lexer.text);
+		PARSER_PRINT(parser.depth, "<identifier> ");
+		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 	} else if(lexer.token >= INT && lexer.token <= VOID) {
 		PARSER_PRINT(parser.depth, "<keyword> %s </keyword>\n", keyword[lexer.token - CLASS]);
 	} else
@@ -852,8 +816,9 @@ int subroutineDec(void) {
 	/* subroutineName */
 	if(lex() != ID)
 		error(1, 0, "parser error in %s line %d", __func__, __LINE__);
-	PARSER_PRINT(parser.depth, "<identifier> %s </identifier>\n", lexer.text); /* subroutineName */
-	free(lexer.text);
+	PARSER_PRINT(parser.depth, "<identifier> ");
+	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, stderr);
+	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), stderr);
 
 	/* parameterList */
 	if(lex() != '(')
@@ -880,11 +845,7 @@ int subroutineDec(void) {
 int classVarDec(void) {
 	lex();
 	if(lexer.token != STATIC && lexer.token != FIELD) {
-		if(lexer.text) {
-			free(lexer.text);
-			lexer.text = 0;
-		}
-		lexer.ptr = lexer.unget;
+				lexer.ptr = lexer.unget;
 		lexer.token = 0;
 		return 0;
 	}
@@ -932,16 +893,16 @@ void debug_lex(char *text) {
 			printf("<symbol> %c </symbol>\n", lexer.token);
 			break;
 		case NUMBER:
-			printf("<integerConstant> %s </integerConstant>\n", lexer.text);
-			free(lexer.text);
+			//printf("<integerConstant> %s </integerConstant>\n", lexer.text);
+			//free(lexer.text);
 			break;
 		case STRING:
-			printf("<stringConstant> %s </stringConstant>\n", lexer.text);
-			free(lexer.text);
+			//printf("<stringConstant> %s </stringConstant>\n", lexer.text);
+			//free(lexer.text);
 			break;
 		case ID:
-			printf("<identifier> %s </identifier>\n", lexer.text);
-			free(lexer.text);
+			//printf("<identifier> %s </identifier>\n", lexer.text);
+			//free(lexer.text);
 			break;
 		}
 	}
