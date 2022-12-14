@@ -4,3 +4,5 @@ TARGET = jack.c
 
 all:
 	$(CC) $(FLAGS) $(TARGET) -o jack
+test: all
+	cd test/; ./unittest; cd ..;
