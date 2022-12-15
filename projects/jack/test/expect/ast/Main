@@ -1,0 +1,642 @@
+id: 1
+kind: CLASS
+val: Main
+down: 2
+next: 0
+
+*   id: 2
+*   kind: CLASSVARDEC
+*   val: (null)
+*   down: 3
+*   next: 6
+
+*   *   id: 3
+*   *   kind: STORAGEQUALIFIER
+*   *   val: static
+*   *   down: 0
+*   *   next: 4
+
+*   *   id: 4
+*   *   kind: TYPE
+*   *   val: boolean
+*   *   down: 0
+*   *   next: 5
+
+*   *   id: 5
+*   *   kind: VARNAME
+*   *   val: test
+*   *   down: 0
+*   *   next: 0
+
+*   id: 6
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 7
+*   next: 31
+
+*   *   id: 7
+*   *   kind: STORAGEQUALIFIER
+*   *   val: function
+*   *   down: 0
+*   *   next: 8
+
+*   *   id: 8
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 9
+
+*   *   id: 9
+*   *   kind: SUBROUTINENAME
+*   *   val: main
+*   *   down: 0
+*   *   next: 10
+
+*   *   id: 10
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 11
+*   *   next: 0
+
+*   *   *   id: 11
+*   *   *   kind: VARDEC
+*   *   *   val: (null)
+*   *   *   down: 12
+*   *   *   next: 14
+
+*   *   *   *   id: 12
+*   *   *   *   kind: TYPE
+*   *   *   *   val: SquareGame
+*   *   *   *   down: 0
+*   *   *   *   next: 13
+
+*   *   *   *   id: 13
+*   *   *   *   kind: VARNAME
+*   *   *   *   val: game
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   *   *   id: 14
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 15
+*   *   *   next: 0
+
+*   *   *   *   id: 15
+*   *   *   *   kind: LETSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 16
+*   *   *   *   next: 22
+
+*   *   *   *   *   id: 16
+*   *   *   *   *   kind: VARNAME
+*   *   *   *   *   val: game
+*   *   *   *   *   down: 0
+*   *   *   *   *   next: 21
+
+*   *   *   *   *   id: 21
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 17
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 17
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 18
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 18
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 19
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 19
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: SquareGame
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 20
+
+*   *   *   *   *   *   *   *   id: 20
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: new
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 22
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 23
+*   *   *   *   next: 26
+
+*   *   *   *   *   id: 23
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 24
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 24
+*   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   val: game
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 25
+
+*   *   *   *   *   *   id: 25
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: run
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 26
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 27
+*   *   *   *   next: 30
+
+*   *   *   *   *   id: 27
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 28
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 28
+*   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   val: game
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 29
+
+*   *   *   *   *   *   id: 29
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: dispose
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 30
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 31
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 32
+*   next: 0
+
+*   *   id: 32
+*   *   kind: STORAGEQUALIFIER
+*   *   val: function
+*   *   down: 0
+*   *   next: 33
+
+*   *   id: 33
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 34
+
+*   *   id: 34
+*   *   kind: SUBROUTINENAME
+*   *   val: more
+*   *   down: 0
+*   *   next: 35
+
+*   *   id: 35
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 36
+*   *   next: 0
+
+*   *   *   id: 36
+*   *   *   kind: VARDEC
+*   *   *   val: (null)
+*   *   *   down: 37
+*   *   *   next: 40
+
+*   *   *   *   id: 37
+*   *   *   *   kind: TYPE
+*   *   *   *   val: int
+*   *   *   *   down: 0
+*   *   *   *   next: 38
+
+*   *   *   *   id: 38
+*   *   *   *   kind: VARNAME
+*   *   *   *   val: i
+*   *   *   *   down: 0
+*   *   *   *   next: 39
+
+*   *   *   *   id: 39
+*   *   *   *   kind: VARNAME
+*   *   *   *   val: j
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   *   *   id: 40
+*   *   *   kind: VARDEC
+*   *   *   val: (null)
+*   *   *   down: 41
+*   *   *   next: 43
+
+*   *   *   *   id: 41
+*   *   *   *   kind: TYPE
+*   *   *   *   val: String
+*   *   *   *   down: 0
+*   *   *   *   next: 42
+
+*   *   *   *   id: 42
+*   *   *   *   kind: VARNAME
+*   *   *   *   val: s
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   *   *   id: 43
+*   *   *   kind: VARDEC
+*   *   *   val: (null)
+*   *   *   down: 44
+*   *   *   next: 46
+
+*   *   *   *   id: 44
+*   *   *   *   kind: TYPE
+*   *   *   *   val: Array
+*   *   *   *   down: 0
+*   *   *   *   next: 45
+
+*   *   *   *   id: 45
+*   *   *   *   kind: VARNAME
+*   *   *   *   val: a
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   *   *   id: 46
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 47
+*   *   *   next: 0
+
+*   *   *   *   id: 47
+*   *   *   *   kind: IFSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 50
+*   *   *   *   next: 107
+
+*   *   *   *   *   id: 50
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 48
+*   *   *   *   *   next: 51
+
+*   *   *   *   *   *   id: 48
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 49
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 49
+*   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   val: false
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 51
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 52
+*   *   *   *   *   next: 74
+
+*   *   *   *   *   *   id: 52
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 53
+*   *   *   *   *   *   next: 57
+
+*   *   *   *   *   *   *   id: 53
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: s
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 56
+
+*   *   *   *   *   *   *   id: 56
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 54
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 54
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 55
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 55
+*   *   *   *   *   *   *   *   *   kind: STRINGCONST
+*   *   *   *   *   *   *   *   *   val: string constant
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 57
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 58
+*   *   *   *   *   *   next: 62
+
+*   *   *   *   *   *   *   id: 58
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: s
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 61
+
+*   *   *   *   *   *   *   id: 61
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 59
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 59
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 60
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 60
+*   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   val: null
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 62
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 63
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 63
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: a
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 66
+
+*   *   *   *   *   *   *   id: 66
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 64
+*   *   *   *   *   *   *   next: 73
+
+*   *   *   *   *   *   *   *   id: 64
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 65
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 65
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 73
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 67
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 67
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 68
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 68
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: a
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 69
+
+*   *   *   *   *   *   *   *   *   id: 69
+*   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   val: [
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 72
+
+*   *   *   *   *   *   *   *   *   id: 72
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 70
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 70
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 71
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 71
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 74
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 75
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 75
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 76
+*   *   *   *   *   *   next: 87
+
+*   *   *   *   *   *   *   id: 76
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: i
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 79
+
+*   *   *   *   *   *   *   id: 79
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 77
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 77
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 78
+*   *   *   *   *   *   *   *   next: 80
+
+*   *   *   *   *   *   *   *   *   id: 78
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: i
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 80
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: *
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 81
+
+*   *   *   *   *   *   *   *   id: 81
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 86
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 86
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 82
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 82
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 83
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 83
+*   *   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 84
+
+*   *   *   *   *   *   *   *   *   *   *   id: 84
+*   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   down: 85
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 85
+*   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   val: j
+*   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 87
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 88
+*   *   *   *   *   *   next: 99
+
+*   *   *   *   *   *   *   id: 88
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: j
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 91
+
+*   *   *   *   *   *   *   id: 91
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 89
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 89
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 90
+*   *   *   *   *   *   *   *   next: 92
+
+*   *   *   *   *   *   *   *   *   id: 90
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: j
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 92
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: /
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 93
+
+*   *   *   *   *   *   *   *   id: 93
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 98
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 98
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 94
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 94
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 95
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 95
+*   *   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 96
+
+*   *   *   *   *   *   *   *   *   *   *   id: 96
+*   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   down: 97
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 97
+*   *   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 99
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 100
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 100
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: i
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 103
+
+*   *   *   *   *   *   *   id: 103
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 101
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 101
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 102
+*   *   *   *   *   *   *   *   next: 104
+
+*   *   *   *   *   *   *   *   *   id: 102
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: i
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 104
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: |
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 105
+
+*   *   *   *   *   *   *   *   id: 105
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 106
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 106
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: j
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 107
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
