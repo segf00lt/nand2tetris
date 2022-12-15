@@ -40,11 +40,15 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <libgen.h>
+#include <assert.h>
 #include "fmap.c"
-#include "stb_ds.h"
 
 #define ARRLEN(x) (sizeof(x) / sizeof(*x))
 #define STRLEN(x) (sizeof(x) / sizeof(*x)) - 1 /* compile-time strlen */
+#define AST_PAGE_SIZE 128
+#define STRPOOL_PAGE_SIZE 512
+#define AST_INITIAL_PAGE_COUNT 4
+#define STRPOOL_INITIAL_PAGE_COUNT 4
 
 #define PARSER_PRINT(indent, fmt, ...) { \
 	register unsigned int i = indent; \
@@ -56,9 +60,21 @@
 	fprintf(xmlout, fmt, ##__VA_ARGS__); \
 }
 
-#define STRPOOL_INIT(pool) pool.base = pool.free = malloc((pool.cap = 512))
+#define STRPOOL_INIT(pool) { \
+	pool.pages = malloc(STRPOOL_INITIAL_PAGE_COUNT * sizeof(char*)); \
+	pool.cap = STRPOOL_INITIAL_PAGE_COUNT; \
+	pool.cur = 0; \
+	pool.pages[pool.cur] = malloc(STRPOOL_PAGE_SIZE); \
+	pool.base = pool.free = pool.pages[ast.cur]; \
+}
 
-#define AST_INIT(ast) ast.base = ast.free = malloc((ast.cap = 128) * sizeof(AST_node))
+#define AST_INIT(ast) { \
+	ast.pages = malloc(AST_INITIAL_PAGE_COUNT * sizeof(AST_node*)); \
+	ast.cap = AST_INITIAL_PAGE_COUNT; \
+	ast.cur = 0; \
+	ast.pages[ast.cur] = malloc(AST_PAGE_SIZE * sizeof(AST_node)); \
+	ast.base = ast.free = ast.pages[ast.cur]; \
+}
 
 #define SYM_TAB_INIT(tab) {\
 	tab.cap = 128;\
@@ -75,8 +91,7 @@ enum TOKENS {
 	T_STATIC,
 	T_VAR,
 	T_INT, T_CHAR, T_BOOL, T_VOID,
-	T_TRUE, T_FALSE, T_NULL,
-	T_THIS,
+	T_TRUE, T_FALSE, T_NULL, T_THIS,
 	T_LET,
 	T_DO,
 	T_IF, T_ELSE, T_WHILE, T_RETURN,
@@ -99,7 +114,7 @@ enum SEGMENTS {
 };
 
 enum NODES {
-	N_CLASS,
+	N_CLASS = 1,
 	N_CLASSNAME,
 	N_CLASSVARDEC,
 	N_SUBROUTINEDEC,
@@ -117,7 +132,7 @@ enum NODES {
 	N_EXPRESSION,
 	N_TERM,
 	N_SUBROUTINECALL,
-	N_BINOP,
+	N_OP,
 	N_UNOP,
 	N_INTCONST,
 	N_STRINGCONST,
@@ -129,10 +144,12 @@ enum NODES {
 };
 
 char *nodes[] = {
+	0,
 	"CLASS",
+	"CLASSNAME",
 	"CLASSVARDEC",
 	"SUBROUTINEDEC",
-	"PARAMETER",
+	"PARAMETERLIST",
 	"SUBROUTINEBODY",
 	"VARDEC",
 	"STATEMENTS",
@@ -146,7 +163,7 @@ char *nodes[] = {
 	"EXPRESSION",
 	"TERM",
 	"SUBROUTINECALL",
-	"BINOP",
+	"OP",
 	"UNOP",
 	"INTCONST",
 	"STRINGCONST",
@@ -205,17 +222,23 @@ enum OPERATORS {
 	OP_SUB,
 	OP_MUL,
 	OP_DIV,
+	OP_NOT,
 	OP_AND,
 	OP_OR,
 	OP_LT,
 	OP_GT,
-	OP_EQ
+	OP_EQ,
+	OP_INDEX,
+	OP_COMMA,
 };
 
-char *operators[] = { "+", "-", "*", "/", "&", "|", "<", ">", "=" };
+char *operators[] = { "+", "-", "*", "/", "~", "&", "|", "<", ">", "=", "[", "," };
 
 typedef struct {
-	char *base, *free;
+	char *base;
+	char *free;
+	char **pages;
+	size_t cur;
 	size_t cap;
 } Strpool;
 
@@ -236,14 +259,18 @@ typedef struct syntax_node {
 } AST_node;
 
 typedef struct {
-	AST_node *base;
+	/* since we never free individual nodes *free stores the first vacant
+	 * node in the current page */
 	AST_node *free;
-	size_t cap;
+	AST_node *base; /* base of current page */
+	AST_node **pages;
+	size_t cur; /* index of current page */
+	size_t cap; /* capacity of **pages */
 } AST;
 
 typedef struct {
 	char *name;
-	char *kind; /* function type string */
+	char *kind; /* class, function or var */
 	char *type; /* data type string */
 	int seg; /* memory segment */
 	int pos; /* position in memory segment */
@@ -268,7 +295,8 @@ char funcname[64];
 Strpool spool;
 
 /* utility functions */
-char* str_alloc(Strpool *pool, size_t len, char *s);
+char* strpool_alloc(Strpool *pool, size_t len, char *s);
+void strpool_free(Strpool *pool);
 void cleanup(void);
 
 /* symbol table functions */
@@ -286,7 +314,7 @@ int lex(void);
 AST_node* ast_alloc_node(AST *ast, int id, char *val);
 
 /* parser functions */
-void parse(void);
+AST_node* parse(void);
 AST_node* class(void);
 AST_node* classVarDec(void);
 AST_node* subroutineDec(void);
@@ -304,14 +332,19 @@ AST_node* expression(void);
 AST_node* term(void);
 AST_node* subroutineCall(void);
 
-char* str_alloc(Strpool *pool, size_t len, char *s) {
+char* strpool_alloc(Strpool *pool, size_t len, char *s) {
 	size_t count, i;
 	char *p;
 
 	count = pool->free - pool->base;
-	if(count >= pool->cap) {
-		pool->base = realloc(pool->base, (pool->cap <<= 1));
-		pool->free = pool->base + count;
+	if(count + len >= STRPOOL_PAGE_SIZE) {
+		++pool->cur;
+		if(pool->cur >= pool->cap) {
+			pool->cap <<= 1;
+			pool->pages = realloc(pool->pages, pool->cap * sizeof(char*));
+		}
+		pool->pages[pool->cur] = malloc(STRPOOL_PAGE_SIZE);
+		pool->base = pool->free = pool->pages[pool->cur];
 	}
 
 	for(i = 0; i < len; ++i) pool->free[i] = s[i];
@@ -323,10 +356,37 @@ char* str_alloc(Strpool *pool, size_t len, char *s) {
 	return p;
 }
 
+void strpool_free(Strpool *pool) {
+	for(size_t i = 0; i <= pool->cur; ++i)
+		free(pool->pages[i]);
+	free(pool->pages);
+}
+
+AST_node* ast_alloc_node(AST *ast, int id, char *val) {
+	if(ast->free - ast->base >= AST_PAGE_SIZE) {
+		++ast->cur;
+		if(ast->cur >= ast->cap) {
+			ast->cap <<= 1;
+			ast->pages = realloc(ast->pages, ast->cap * sizeof(AST_node*));
+		}
+		ast->pages[ast->cur] = malloc(AST_PAGE_SIZE * sizeof(AST_node));
+		ast->base = ast->free = ast->pages[ast->cur];
+	}
+
+	*(ast->free) = (AST_node){ .id = id, .val = val, .left = 0, .right = 0 };
+	return ast->free++;
+}
+
+void ast_free(AST *ast) {
+	for(size_t i = 0; i <= ast->cur; ++i)
+		free(ast->pages[i]);
+	free(ast->pages);
+}
+
 void cleanup(void) {
-	free(spool.base);
+	strpool_free(&spool);
+	ast_free(&ast);
 	free(classtab.data);
-	free(ast.base);
 	//free(functab.data);
 	fmapclose(&fm);
 	fclose(xmlout);
@@ -461,23 +521,6 @@ int lex(void) {
 	return (lexer.token = T_ID);
 }
 
-AST_node* ast_alloc_node(AST *ast, int id, char *val) {
-	AST_node *newbase;
-	size_t i;
-	if(ast->free - ast->base >= ast->cap) {
-		i = ast->cap - 1;
-		ast->cap <<= 1;
-		newbase = realloc(ast->base, sizeof(AST_node) * ast->cap);
-		for(; i; --i) {
-			newbase[i].left = (ast->base[i].left - ast->base) + newbase;
-			newbase[i].right = (ast->base[i].right - ast->base) + newbase;
-		}
-	}
-
-	*(ast->free) = (AST_node){ .id = id, .val = val };
-	return ast->free++;
-}
-
 AST_node* class(void) {
 	AST_node *root, *child;
 
@@ -501,7 +544,7 @@ AST_node* class(void) {
 	while((child->right = classVarDec()))
 		child = child->right;
 
-	root->right = child = subroutineDec();
+	child->right = subroutineDec();
 	while((child->right = subroutineDec()))
 		child = child->right;
 
@@ -542,7 +585,7 @@ AST_node* classVarDec(void) {
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 		child->right = ast_alloc_node(&ast, N_TYPE, 0);
-		child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	} else
 		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 
@@ -555,7 +598,7 @@ AST_node* classVarDec(void) {
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 	child->right = ast_alloc_node(&ast, N_VARNAME, 0);
-	child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+	child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->right;
 
 	while(lex() == ',') {
@@ -567,7 +610,7 @@ AST_node* classVarDec(void) {
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 		child->right = ast_alloc_node(&ast, N_VARNAME, 0);
-		child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		child = child->right;
 	}
 
@@ -607,7 +650,7 @@ AST_node* subroutineDec(void) {
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 		child->right = ast_alloc_node(&ast, N_TYPE, 0);
-		child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	} else if(lexer.token >=T_INT && lexer.token <= T_VOID) {
 		PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
@@ -620,7 +663,7 @@ AST_node* subroutineDec(void) {
 	/* subroutineName */
 	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	child->right = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
-	child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+	child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->right;
 
 	PARSER_PRINT(depth, "<identifier> ");
@@ -661,7 +704,7 @@ AST_node* parameterList(void) {
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 		child = ast_alloc_node(&ast, N_TYPE, 0);
-		child->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
 	} else if(lexer.token >=T_INT && lexer.token <= T_VOID) {
 		PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
@@ -681,7 +724,7 @@ AST_node* parameterList(void) {
 	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 
 	child->right = ast_alloc_node(&ast, N_VARNAME, 0);
-	child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+	child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->right;
 
 	PARSER_PRINT(depth, "<identifier> ");
@@ -698,7 +741,7 @@ AST_node* parameterList(void) {
 			fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 			child->right = ast_alloc_node(&ast, N_TYPE, 0);
-			child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+			child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
 		} else if(lexer.token >=T_INT && lexer.token <= T_VOID) {
 			PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
@@ -715,7 +758,7 @@ AST_node* parameterList(void) {
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 		child->right = ast_alloc_node(&ast, N_VARNAME, 0);
-		child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		child = child->right;
 	}
 
@@ -734,13 +777,16 @@ AST_node* subroutineBody(void) {
 
 	root = ast_alloc_node(&ast, N_SUBROUTINEBODY, 0);
 
-	root->left = child = varDec();
-	while((child->right = varDec()))
-		child = child->right;
-
 	/* NOTE if this were a real language declarations would be statements
 	 * so theres no point putting statements on the left side of this subtree */
-	child->right = statements();
+
+	if((root->left = child = varDec())) {
+		while((child->right = varDec()))
+			child = child->right;
+
+		child->right = statements();
+	} else
+		root->left = child = statements();
 
 	if(lex() != '}') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
@@ -776,7 +822,7 @@ AST_node* varDec(void) {
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 		child = ast_alloc_node(&ast, N_TYPE, 0);
-		child->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	} else
 		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 
@@ -784,7 +830,7 @@ AST_node* varDec(void) {
 
 	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	child->right = ast_alloc_node(&ast, N_VARNAME, 0);
-	child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+	child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->right;
 
 	PARSER_PRINT(depth, "<identifier> ");
@@ -797,7 +843,7 @@ AST_node* varDec(void) {
 		if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 
 		child->right = ast_alloc_node(&ast, N_VARNAME, 0);
-		child->right->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->right->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		child = child->right;
 
 		PARSER_PRINT(depth, "<identifier> ");
@@ -824,10 +870,10 @@ AST_node* statements(void) {
 	root = ast_alloc_node(&ast, N_STATEMENTS, 0);
 
 	if((child = letStatement())) root->left = child;
-	if((child = ifStatement())) root->left = child;
-	if((child = whileStatement())) root->left = child;
-	if((child = doStatement())) root->left = child;
-	if((child = returnStatement())) root->left = child;
+	else if((child = ifStatement())) root->left = child;
+	else if((child = whileStatement())) root->left = child;
+	else if((child = doStatement())) root->left = child;
+	else if((child = returnStatement())) root->left = child;
 
 	for(;; child = child->right) {
 		if((child->right = letStatement())) continue;
@@ -861,7 +907,7 @@ AST_node* letStatement(void) {
 
 	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	root->left = child = ast_alloc_node(&ast, N_VARNAME, 0);
-	child->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+	child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
 	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
@@ -880,7 +926,7 @@ AST_node* letStatement(void) {
 	}
 
 	if(lex() != '=') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
-	child->right = ast_alloc_node(&ast, N_BINOP, operators[OP_EQ]);
+	child->right = ast_alloc_node(&ast, N_OP, operators[OP_EQ]);
 	child = child->right;
 	PARSER_PRINT(depth, "<symbol> = </symbol>\n");
 
@@ -1038,30 +1084,37 @@ AST_node* expression(void) {
 
 	PARSER_PRINT(depth, "<expression>\n");
 	++depth;
-	if(term() == 0) {
+	if(!(child = term())) {
 		--depth;
 		PARSER_PRINT(depth, "</expression>\n");
 		return 0;
 	}
 
 	root = ast_alloc_node(&ast, N_EXPRESSION, 0);
+	root->left = child;
 
 	while(1) {
 		lex();
 
-		/* TODO replace operator characters with op OP_xxx */
-		if(lexer.token != '+' && lexer.token != '-' &&
-				lexer.token != '*' && lexer.token != '/' &&
-				lexer.token != '&' && lexer.token != '|' &&
-				lexer.token != '<' && lexer.token != '>' && lexer.token != '=') {
+		register int i;
+		for(i = 0; i < ARRLEN(operators) && operators[i][0] != lexer.token; ++i);
+
+		if(i >= ARRLEN(operators) || operators[i][0] == ',') {
 			lexer.ptr = lexer.unget;
 			lexer.token = 0;
 			break;
 		}
+
 		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
+		child->right = ast_alloc_node(&ast, N_OP, operators[i]);
+		child = child->right;
+
 		child->right = term();
-		if(child->right) child = child->right; /* TODO can term return 0 ???? */
+		if(child->right)
+			child = child->right;
+		else
+			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	}
 
 	--depth;
@@ -1070,7 +1123,6 @@ AST_node* expression(void) {
 	return root;
 }
 
-/* TODO term() */
 AST_node* term(void) {
 	AST_node *root, *child;
 	register char *tmp1, *tmp2, *tmp3;
@@ -1078,29 +1130,41 @@ AST_node* term(void) {
 	if(lex() == T_END)
 		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 
+	if(!(lexer.token >= T_NUMBER && lexer.token <= T_ID) &&
+	   !(lexer.token >= T_TRUE && lexer.token <= T_THIS) && 
+	   lexer.token != '(' && lexer.token != '-' && lexer.token != '~') {
+		lexer.token = 0;
+		lexer.ptr = lexer.unget;
+		return 0;
+	}
+
+	PARSER_PRINT(depth, "<term>\n");
+	++depth;
+
+	root = ast_alloc_node(&ast, N_TERM, 0);
+
 	switch(lexer.token) {
 	case T_NUMBER:
-		PARSER_PRINT(depth, "<term>\n");
-		++depth;
 		PARSER_PRINT(depth, "<integerConstant> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </integerConstant>\n", 1, STRLEN(" </integerConstant>\n"), xmlout);
+
+		child = ast_alloc_node(&ast, N_INTCONST, 0);
+		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		break;
 	case T_STRING:
-		PARSER_PRINT(depth, "<term>\n");
-		++depth;
 		PARSER_PRINT(depth, "<stringConstant> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </stringConstant>\n", 1, STRLEN(" </stringConstant>\n"), xmlout);
+
+		child = ast_alloc_node(&ast, N_STRINGCONST, 0);
+		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		break;
 	case T_TRUE: case T_FALSE: case T_NULL: case T_THIS:
-		PARSER_PRINT(depth, "<term>\n");
-		++depth;
 		PARSER_PRINT(depth, "<keyword> %s </keyword>\n",keyword[lexer.token-T_CLASS]);
+		child = ast_alloc_node(&ast, N_KEYCONST, keyword[lexer.token - T_CLASS]);
 		break;
 	case T_ID:
-		PARSER_PRINT(depth, "<term>\n");
-		++depth;
 		tmp1 = lexer.unget;
 		tmp2 = lexer.text_s;
 		tmp3 = lexer.text_e;
@@ -1108,7 +1172,7 @@ AST_node* term(void) {
 
 		if(lexer.token == '(' || lexer.token == '.') {
 			lexer.ptr = tmp1;
-			subroutineCall();
+			child = subroutineCall();
 			break;
 		}
 
@@ -1116,38 +1180,42 @@ AST_node* term(void) {
 		fwrite(tmp2, 1, tmp3 - tmp2, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
+		child = ast_alloc_node(&ast, N_VARNAME, 0);
+		child->val = strpool_alloc(&spool, tmp3 - tmp2, tmp2);
+
 		if(lexer.token != '[') {
 			lexer.ptr = lexer.unget;
 		} else {
 			PARSER_PRINT(depth, "<symbol> [ </symbol>\n");
-			expression();
+
+			child->right = ast_alloc_node(&ast, N_OP, operators[OP_INDEX]);
+			child->right->right = expression();
+
 			if(lex() != ']') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 			PARSER_PRINT(depth, "<symbol> ] </symbol>\n");
 		}
 		break;
 	case '(':
-		PARSER_PRINT(depth, "<term>\n");
-		++depth;
 		PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
-		expression();
+
+		child = expression();
+
 		if(lex() != ')') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 		break;
 	case '-': case '~':
-		PARSER_PRINT(depth, "<term>\n");
-		++depth;
 		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
-		if(!term())
+		child = ast_alloc_node(&ast, N_OP, operators[(lexer.token == '-') ? OP_SUB : OP_NOT]);
+		if(!(child->right = term()))
 			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 		break;
-	default:
-		lexer.token = 0;
-		lexer.ptr = lexer.unget;
-		return 0;
 	}
+
+	root->left = child;
 
 	--depth;
 	PARSER_PRINT(depth, "</term>\n");
+
 	return root;
 }
 
@@ -1170,17 +1238,17 @@ AST_node* subroutineCall(void) {
 	if(lex() != '.') {
 		lexer.ptr = lexer.unget;
 		lexer.token = 0;
-		root->left = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
-		root->left->val = str_alloc(&spool, tmp1 - tmp0, tmp0);
+		root->left = child = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
+		child->val = strpool_alloc(&spool, tmp1 - tmp0, tmp0);
 	} else {
 		root->left = ast_alloc_node(&ast, N_CLASSNAME, 0);
-		root->left->val = str_alloc(&spool, tmp1 - tmp0, tmp0);
+		root->left->val = strpool_alloc(&spool, tmp1 - tmp0, tmp0);
 
 		PARSER_PRINT(depth, "<symbol> . </symbol>\n");
 		if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 
 		child = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
-		child->val = str_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
+		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		root->left->right = child;
 
 		PARSER_PRINT(depth, "<identifier> ");
@@ -1204,9 +1272,12 @@ AST_node* expressionList(void) {
 	PARSER_PRINT(depth, "<expressionList>\n");
 	++depth;
 
+	if(!(child = expression())) {
+		--depth;
+		PARSER_PRINT(depth, "</expressionList>\n");
+		return 0;
+	}
 	root = ast_alloc_node(&ast, N_EXPRESSIONLIST, 0);
-
-	child = expression();
 	root->left = child;
 	while(1) {
 		if(lex() != ',') {
@@ -1225,9 +1296,46 @@ AST_node* expressionList(void) {
 	return root;
 }
 
-void parse(void) {
+AST_node* parse(void) {
 	lex();
-	class();
+	return class();
+}
+
+void debug_ast_alloc(void) {
+	for(size_t i = 0; i <= ast.cur; ++i) {
+		fprintf(stderr, "PAGE %zu\n", i);
+		for(size_t j = 0; ast.pages[i][j].id; ++j) {
+			fprintf(stderr, "\taddress: %p\n"
+					"\tid: %s\n"
+					"\tval: %s\n"
+					"\tleft: %p\n"
+					"\tright: %p\n\n"
+					, (void*)(ast.pages[i]+j),
+					nodes[ast.pages[i][j].id], ast.pages[i][j].val,
+					(void*)(ast.pages[i][j].left), (void*)(ast.pages[i][j].right));
+		}
+	}
+}
+
+void debug_parser(AST_node *node) {
+	for(; node; node = node->right) {
+		int i;
+		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, stderr);
+		fprintf(stderr, "address: %p\n", (void*)(node));
+		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, stderr);
+		fprintf(stderr, "id: %s\n", nodes[node->id]);
+		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, stderr);
+		fprintf(stderr, "val: %s\n", node->val);
+		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, stderr);
+		fprintf(stderr, "left: %p\n", (void*)(node->left));
+		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, stderr);
+		fprintf(stderr, "right: %p\n\n", (void*)(node->right));
+		if(node->left) {
+			++depth;
+			debug_parser(node->left);
+			--depth;
+		}
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -1245,7 +1353,10 @@ int main(int argc, char *argv[]) {
 	SYM_TAB_INIT(classtab);
 	AST_INIT(ast);
 
-	parse();
+	AST_node *root = parse();
+	depth = 0;
+	//debug_ast_alloc();
+	debug_parser(root);
 	
 	return 0;
 }
