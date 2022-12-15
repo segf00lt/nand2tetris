@@ -1,0 +1,3576 @@
+id: 1
+kind: CLASS
+val: Square
+down: 2
+next: 0
+
+*   id: 2
+*   kind: CLASSVARDEC
+*   val: (null)
+*   down: 3
+*   next: 7
+
+*   *   id: 3
+*   *   kind: STORAGEQUALIFIER
+*   *   val: field
+*   *   down: 0
+*   *   next: 4
+
+*   *   id: 4
+*   *   kind: TYPE
+*   *   val: int
+*   *   down: 0
+*   *   next: 5
+
+*   *   id: 5
+*   *   kind: VARNAME
+*   *   val: x
+*   *   down: 0
+*   *   next: 6
+
+*   *   id: 6
+*   *   kind: VARNAME
+*   *   val: y
+*   *   down: 0
+*   *   next: 0
+
+*   id: 7
+*   kind: CLASSVARDEC
+*   val: (null)
+*   down: 8
+*   next: 11
+
+*   *   id: 8
+*   *   kind: STORAGEQUALIFIER
+*   *   val: field
+*   *   down: 0
+*   *   next: 9
+
+*   *   id: 9
+*   *   kind: TYPE
+*   *   val: int
+*   *   down: 0
+*   *   next: 10
+
+*   *   id: 10
+*   *   kind: VARNAME
+*   *   val: size
+*   *   down: 0
+*   *   next: 0
+
+*   id: 11
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 12
+*   next: 46
+
+*   *   id: 12
+*   *   kind: STORAGEQUALIFIER
+*   *   val: constructor
+*   *   down: 0
+*   *   next: 13
+
+*   *   id: 13
+*   *   kind: TYPE
+*   *   val: Square
+*   *   down: 0
+*   *   next: 14
+
+*   *   id: 14
+*   *   kind: SUBROUTINENAME
+*   *   val: new
+*   *   down: 0
+*   *   next: 16
+
+*   *   id: 16
+*   *   kind: PARAMETERLIST
+*   *   val: (null)
+*   *   down: 15
+*   *   next: 22
+
+*   *   *   id: 15
+*   *   *   kind: TYPE
+*   *   *   val: int
+*   *   *   down: 0
+*   *   *   next: 17
+
+*   *   *   id: 17
+*   *   *   kind: VARNAME
+*   *   *   val: Ax
+*   *   *   down: 0
+*   *   *   next: 18
+
+*   *   *   id: 18
+*   *   *   kind: TYPE
+*   *   *   val: int
+*   *   *   down: 0
+*   *   *   next: 19
+
+*   *   *   id: 19
+*   *   *   kind: VARNAME
+*   *   *   val: Ay
+*   *   *   down: 0
+*   *   *   next: 20
+
+*   *   *   id: 20
+*   *   *   kind: TYPE
+*   *   *   val: int
+*   *   *   down: 0
+*   *   *   next: 21
+
+*   *   *   id: 21
+*   *   *   kind: VARNAME
+*   *   *   val: Asize
+*   *   *   down: 0
+*   *   *   next: 0
+
+*   *   id: 22
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 23
+*   *   next: 0
+
+*   *   *   id: 23
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 24
+*   *   *   next: 0
+
+*   *   *   *   id: 24
+*   *   *   *   kind: LETSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 25
+*   *   *   *   next: 29
+
+*   *   *   *   *   id: 25
+*   *   *   *   *   kind: VARNAME
+*   *   *   *   *   val: x
+*   *   *   *   *   down: 0
+*   *   *   *   *   next: 28
+
+*   *   *   *   *   id: 28
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 26
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 26
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 27
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 27
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: Ax
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 29
+*   *   *   *   kind: LETSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 30
+*   *   *   *   next: 34
+
+*   *   *   *   *   id: 30
+*   *   *   *   *   kind: VARNAME
+*   *   *   *   *   val: y
+*   *   *   *   *   down: 0
+*   *   *   *   *   next: 33
+
+*   *   *   *   *   id: 33
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 31
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 31
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 32
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 32
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: Ay
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 34
+*   *   *   *   kind: LETSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 35
+*   *   *   *   next: 39
+
+*   *   *   *   *   id: 35
+*   *   *   *   *   kind: VARNAME
+*   *   *   *   *   val: size
+*   *   *   *   *   down: 0
+*   *   *   *   *   next: 38
+
+*   *   *   *   *   id: 38
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 36
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 36
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 37
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 37
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: Asize
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 39
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 40
+*   *   *   *   next: 42
+
+*   *   *   *   *   id: 40
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 41
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 41
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: draw
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 42
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 45
+*   *   *   *   next: 0
+
+*   *   *   *   *   id: 45
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 43
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 43
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 44
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 44
+*   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   val: this
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   id: 46
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 47
+*   next: 61
+
+*   *   id: 47
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 48
+
+*   *   id: 48
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 49
+
+*   *   id: 49
+*   *   kind: SUBROUTINENAME
+*   *   val: dispose
+*   *   down: 0
+*   *   next: 50
+
+*   *   id: 50
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 51
+*   *   next: 0
+
+*   *   *   id: 51
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 52
+*   *   *   next: 0
+
+*   *   *   *   id: 52
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 53
+*   *   *   *   next: 60
+
+*   *   *   *   *   id: 53
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 54
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 54
+*   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   val: Memory
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 55
+
+*   *   *   *   *   *   id: 55
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: deAlloc
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 59
+
+*   *   *   *   *   *   id: 59
+*   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 58
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 58
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 56
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 56
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 57
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 57
+*   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   val: this
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 60
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 61
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 62
+*   next: 99
+
+*   *   id: 62
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 63
+
+*   *   id: 63
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 64
+
+*   *   id: 64
+*   *   kind: SUBROUTINENAME
+*   *   val: draw
+*   *   down: 0
+*   *   next: 65
+
+*   *   id: 65
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 66
+*   *   next: 0
+
+*   *   *   id: 66
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 67
+*   *   *   next: 0
+
+*   *   *   *   id: 67
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 68
+*   *   *   *   next: 75
+
+*   *   *   *   *   id: 68
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 69
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 69
+*   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 70
+
+*   *   *   *   *   *   id: 70
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 74
+
+*   *   *   *   *   *   id: 74
+*   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 73
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 73
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 71
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 71
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 72
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 72
+*   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   val: true
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 75
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 76
+*   *   *   *   next: 98
+
+*   *   *   *   *   id: 76
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 77
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 77
+*   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 78
+
+*   *   *   *   *   *   id: 78
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 82
+
+*   *   *   *   *   *   id: 82
+*   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 81
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 81
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 79
+*   *   *   *   *   *   *   next: 85
+
+*   *   *   *   *   *   *   *   id: 79
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 80
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 80
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 85
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 83
+*   *   *   *   *   *   *   next: 88
+
+*   *   *   *   *   *   *   *   id: 83
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 84
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 84
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 88
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 86
+*   *   *   *   *   *   *   next: 94
+
+*   *   *   *   *   *   *   *   id: 86
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 87
+*   *   *   *   *   *   *   *   next: 89
+
+*   *   *   *   *   *   *   *   *   id: 87
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 89
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 90
+
+*   *   *   *   *   *   *   *   id: 90
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 91
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 91
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 94
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 92
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 92
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 93
+*   *   *   *   *   *   *   *   next: 95
+
+*   *   *   *   *   *   *   *   *   id: 93
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 95
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 96
+
+*   *   *   *   *   *   *   *   id: 96
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 97
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 97
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 98
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 99
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 100
+*   next: 137
+
+*   *   id: 100
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 101
+
+*   *   id: 101
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 102
+
+*   *   id: 102
+*   *   kind: SUBROUTINENAME
+*   *   val: erase
+*   *   down: 0
+*   *   next: 103
+
+*   *   id: 103
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 104
+*   *   next: 0
+
+*   *   *   id: 104
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 105
+*   *   *   next: 0
+
+*   *   *   *   id: 105
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 106
+*   *   *   *   next: 113
+
+*   *   *   *   *   id: 106
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 107
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 107
+*   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 108
+
+*   *   *   *   *   *   id: 108
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 112
+
+*   *   *   *   *   *   id: 112
+*   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 111
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 111
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 109
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 109
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 110
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 110
+*   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   val: false
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 113
+*   *   *   *   kind: DOSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 114
+*   *   *   *   next: 136
+
+*   *   *   *   *   id: 114
+*   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 115
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 115
+*   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 116
+
+*   *   *   *   *   *   id: 116
+*   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 120
+
+*   *   *   *   *   *   id: 120
+*   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 119
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 119
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 117
+*   *   *   *   *   *   *   next: 123
+
+*   *   *   *   *   *   *   *   id: 117
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 118
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 118
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 123
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 121
+*   *   *   *   *   *   *   next: 126
+
+*   *   *   *   *   *   *   *   id: 121
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 122
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 122
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 126
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 124
+*   *   *   *   *   *   *   next: 132
+
+*   *   *   *   *   *   *   *   id: 124
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 125
+*   *   *   *   *   *   *   *   next: 127
+
+*   *   *   *   *   *   *   *   *   id: 125
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 127
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 128
+
+*   *   *   *   *   *   *   *   id: 128
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 129
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 129
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 132
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 130
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 130
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 131
+*   *   *   *   *   *   *   *   next: 133
+
+*   *   *   *   *   *   *   *   *   id: 131
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 133
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 134
+
+*   *   *   *   *   *   *   *   id: 134
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 135
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 135
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 136
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 137
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 138
+*   next: 186
+
+*   *   id: 138
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 139
+
+*   *   id: 139
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 140
+
+*   *   id: 140
+*   *   kind: SUBROUTINENAME
+*   *   val: incSize
+*   *   down: 0
+*   *   next: 141
+
+*   *   id: 141
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 142
+*   *   next: 0
+
+*   *   *   id: 142
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 143
+*   *   *   next: 0
+
+*   *   *   *   id: 143
+*   *   *   *   kind: IFSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 156
+*   *   *   *   next: 185
+
+*   *   *   *   *   id: 156
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 144
+*   *   *   *   *   next: 170
+
+*   *   *   *   *   *   id: 144
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 152
+*   *   *   *   *   *   next: 157
+
+*   *   *   *   *   *   *   id: 152
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 145
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 145
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 148
+*   *   *   *   *   *   *   *   next: 153
+
+*   *   *   *   *   *   *   *   *   id: 148
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 146
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 146
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 147
+*   *   *   *   *   *   *   *   *   *   next: 149
+
+*   *   *   *   *   *   *   *   *   *   *   id: 147
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 149
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 150
+
+*   *   *   *   *   *   *   *   *   *   id: 150
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 151
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 151
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 153
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: <
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 154
+
+*   *   *   *   *   *   *   *   id: 154
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 155
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 155
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 254
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 157
+*   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   val: &
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 158
+
+*   *   *   *   *   *   id: 158
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 166
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 166
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 159
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 159
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 162
+*   *   *   *   *   *   *   *   next: 167
+
+*   *   *   *   *   *   *   *   *   id: 162
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 160
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 160
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 161
+*   *   *   *   *   *   *   *   *   *   next: 163
+
+*   *   *   *   *   *   *   *   *   *   *   id: 161
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 163
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 164
+
+*   *   *   *   *   *   *   *   *   *   id: 164
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 165
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 165
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 167
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: <
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 168
+
+*   *   *   *   *   *   *   *   id: 168
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 169
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 169
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 510
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 170
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 171
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 171
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 172
+*   *   *   *   *   *   next: 174
+
+*   *   *   *   *   *   *   id: 172
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 173
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 173
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: erase
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 174
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 175
+*   *   *   *   *   *   next: 182
+
+*   *   *   *   *   *   *   id: 175
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 178
+
+*   *   *   *   *   *   *   id: 178
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 176
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 176
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 177
+*   *   *   *   *   *   *   *   next: 179
+
+*   *   *   *   *   *   *   *   *   id: 177
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 179
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 180
+
+*   *   *   *   *   *   *   *   id: 180
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 181
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 181
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 182
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 183
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 183
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 184
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 184
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: draw
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 185
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 186
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 187
+*   next: 215
+
+*   *   id: 187
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 188
+
+*   *   id: 188
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 189
+
+*   *   id: 189
+*   *   kind: SUBROUTINENAME
+*   *   val: decSize
+*   *   down: 0
+*   *   next: 190
+
+*   *   id: 190
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 191
+*   *   next: 0
+
+*   *   *   id: 191
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 192
+*   *   *   next: 0
+
+*   *   *   *   id: 192
+*   *   *   *   kind: IFSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 195
+*   *   *   *   next: 214
+
+*   *   *   *   *   id: 195
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 193
+*   *   *   *   *   next: 199
+
+*   *   *   *   *   *   id: 193
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 194
+*   *   *   *   *   *   next: 196
+
+*   *   *   *   *   *   *   id: 194
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 196
+*   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   val: >
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 197
+
+*   *   *   *   *   *   id: 197
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 198
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 198
+*   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 199
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 200
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 200
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 201
+*   *   *   *   *   *   next: 203
+
+*   *   *   *   *   *   *   id: 201
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 202
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 202
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: erase
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 203
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 204
+*   *   *   *   *   *   next: 211
+
+*   *   *   *   *   *   *   id: 204
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 207
+
+*   *   *   *   *   *   *   id: 207
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 205
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 205
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 206
+*   *   *   *   *   *   *   *   next: 208
+
+*   *   *   *   *   *   *   *   *   id: 206
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 208
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 209
+
+*   *   *   *   *   *   *   *   id: 209
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 210
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 210
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 211
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 212
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 212
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 213
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 213
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: draw
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 214
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 215
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 216
+*   next: 308
+
+*   *   id: 216
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 217
+
+*   *   id: 217
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 218
+
+*   *   id: 218
+*   *   kind: SUBROUTINENAME
+*   *   val: moveUp
+*   *   down: 0
+*   *   next: 219
+
+*   *   id: 219
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 220
+*   *   next: 0
+
+*   *   *   id: 220
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 221
+*   *   *   next: 0
+
+*   *   *   *   id: 221
+*   *   *   *   kind: IFSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 224
+*   *   *   *   next: 307
+
+*   *   *   *   *   id: 224
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 222
+*   *   *   *   *   next: 228
+
+*   *   *   *   *   *   id: 222
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 223
+*   *   *   *   *   *   next: 225
+
+*   *   *   *   *   *   *   id: 223
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 225
+*   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   val: >
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 226
+
+*   *   *   *   *   *   id: 226
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 227
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 227
+*   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 228
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 229
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 229
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 230
+*   *   *   *   *   *   next: 237
+
+*   *   *   *   *   *   *   id: 230
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 231
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 231
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 232
+
+*   *   *   *   *   *   *   *   id: 232
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 236
+
+*   *   *   *   *   *   *   *   id: 236
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 235
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 235
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 233
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 233
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 234
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 234
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: false
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 237
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 238
+*   *   *   *   *   *   next: 268
+
+*   *   *   *   *   *   *   id: 238
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 239
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 239
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 240
+
+*   *   *   *   *   *   *   *   id: 240
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 244
+
+*   *   *   *   *   *   *   *   id: 244
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 243
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 243
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 241
+*   *   *   *   *   *   *   *   *   next: 252
+
+*   *   *   *   *   *   *   *   *   *   id: 241
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 242
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 242
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 252
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 245
+*   *   *   *   *   *   *   *   *   next: 258
+
+*   *   *   *   *   *   *   *   *   *   id: 245
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 248
+*   *   *   *   *   *   *   *   *   *   next: 253
+
+*   *   *   *   *   *   *   *   *   *   *   id: 248
+*   *   *   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   down: 246
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 246
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 247
+*   *   *   *   *   *   *   *   *   *   *   *   next: 249
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 247
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 249
+*   *   *   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   next: 250
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 250
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 251
+*   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 251
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 253
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 254
+
+*   *   *   *   *   *   *   *   *   *   id: 254
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 255
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 255
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 258
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 256
+*   *   *   *   *   *   *   *   *   next: 264
+
+*   *   *   *   *   *   *   *   *   *   id: 256
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 257
+*   *   *   *   *   *   *   *   *   *   next: 259
+
+*   *   *   *   *   *   *   *   *   *   *   id: 257
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 259
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 260
+
+*   *   *   *   *   *   *   *   *   *   id: 260
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 261
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 261
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 264
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 262
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 262
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 263
+*   *   *   *   *   *   *   *   *   *   next: 265
+
+*   *   *   *   *   *   *   *   *   *   *   id: 263
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 265
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 266
+
+*   *   *   *   *   *   *   *   *   *   id: 266
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 267
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 267
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 268
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 269
+*   *   *   *   *   *   next: 276
+
+*   *   *   *   *   *   *   id: 269
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 272
+
+*   *   *   *   *   *   *   id: 272
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 270
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 270
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 271
+*   *   *   *   *   *   *   *   next: 273
+
+*   *   *   *   *   *   *   *   *   id: 271
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 273
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 274
+
+*   *   *   *   *   *   *   *   id: 274
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 275
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 275
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 276
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 277
+*   *   *   *   *   *   next: 284
+
+*   *   *   *   *   *   *   id: 277
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 278
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 278
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 279
+
+*   *   *   *   *   *   *   *   id: 279
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 283
+
+*   *   *   *   *   *   *   *   id: 283
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 282
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 282
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 280
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 280
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 281
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 281
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: true
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 284
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 285
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 285
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 286
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 286
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 287
+
+*   *   *   *   *   *   *   *   id: 287
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 291
+
+*   *   *   *   *   *   *   *   id: 291
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 290
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 290
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 288
+*   *   *   *   *   *   *   *   *   next: 294
+
+*   *   *   *   *   *   *   *   *   *   id: 288
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 289
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 289
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 294
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 292
+*   *   *   *   *   *   *   *   *   next: 297
+
+*   *   *   *   *   *   *   *   *   *   id: 292
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 293
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 293
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 297
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 295
+*   *   *   *   *   *   *   *   *   next: 303
+
+*   *   *   *   *   *   *   *   *   *   id: 295
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 296
+*   *   *   *   *   *   *   *   *   *   next: 298
+
+*   *   *   *   *   *   *   *   *   *   *   id: 296
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 298
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 299
+
+*   *   *   *   *   *   *   *   *   *   id: 299
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 300
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 300
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 303
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 301
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 301
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 302
+*   *   *   *   *   *   *   *   *   *   next: 304
+
+*   *   *   *   *   *   *   *   *   *   *   id: 302
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 304
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 305
+
+*   *   *   *   *   *   *   *   *   *   id: 305
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 306
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 306
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 307
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 308
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 309
+*   next: 406
+
+*   *   id: 309
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 310
+
+*   *   id: 310
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 311
+
+*   *   id: 311
+*   *   kind: SUBROUTINENAME
+*   *   val: moveDown
+*   *   down: 0
+*   *   next: 312
+
+*   *   id: 312
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 313
+*   *   next: 0
+
+*   *   *   id: 313
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 314
+*   *   *   next: 0
+
+*   *   *   *   id: 314
+*   *   *   *   kind: IFSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 322
+*   *   *   *   next: 405
+
+*   *   *   *   *   id: 322
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 315
+*   *   *   *   *   next: 326
+
+*   *   *   *   *   *   id: 315
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 318
+*   *   *   *   *   *   next: 323
+
+*   *   *   *   *   *   *   id: 318
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 316
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 316
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 317
+*   *   *   *   *   *   *   *   next: 319
+
+*   *   *   *   *   *   *   *   *   id: 317
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 319
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 320
+
+*   *   *   *   *   *   *   *   id: 320
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 321
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 321
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 323
+*   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   val: <
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 324
+
+*   *   *   *   *   *   id: 324
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 325
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 325
+*   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   val: 254
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 326
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 327
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 327
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 328
+*   *   *   *   *   *   next: 335
+
+*   *   *   *   *   *   *   id: 328
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 329
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 329
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 330
+
+*   *   *   *   *   *   *   *   id: 330
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 334
+
+*   *   *   *   *   *   *   *   id: 334
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 333
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 333
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 331
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 331
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 332
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 332
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: false
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 335
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 336
+*   *   *   *   *   *   next: 358
+
+*   *   *   *   *   *   *   id: 336
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 337
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 337
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 338
+
+*   *   *   *   *   *   *   *   id: 338
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 342
+
+*   *   *   *   *   *   *   *   id: 342
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 341
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 341
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 339
+*   *   *   *   *   *   *   *   *   next: 345
+
+*   *   *   *   *   *   *   *   *   *   id: 339
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 340
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 340
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 345
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 343
+*   *   *   *   *   *   *   *   *   next: 348
+
+*   *   *   *   *   *   *   *   *   *   id: 343
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 344
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 344
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 348
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 346
+*   *   *   *   *   *   *   *   *   next: 354
+
+*   *   *   *   *   *   *   *   *   *   id: 346
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 347
+*   *   *   *   *   *   *   *   *   *   next: 349
+
+*   *   *   *   *   *   *   *   *   *   *   id: 347
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 349
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 350
+
+*   *   *   *   *   *   *   *   *   *   id: 350
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 351
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 351
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 354
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 352
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 352
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 353
+*   *   *   *   *   *   *   *   *   *   next: 355
+
+*   *   *   *   *   *   *   *   *   *   *   id: 353
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 355
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 356
+
+*   *   *   *   *   *   *   *   *   *   id: 356
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 357
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 357
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 358
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 359
+*   *   *   *   *   *   next: 366
+
+*   *   *   *   *   *   *   id: 359
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 362
+
+*   *   *   *   *   *   *   id: 362
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 360
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 360
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 361
+*   *   *   *   *   *   *   *   next: 363
+
+*   *   *   *   *   *   *   *   *   id: 361
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 363
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 364
+
+*   *   *   *   *   *   *   *   id: 364
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 365
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 365
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 366
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 367
+*   *   *   *   *   *   next: 374
+
+*   *   *   *   *   *   *   id: 367
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 368
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 368
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 369
+
+*   *   *   *   *   *   *   *   id: 369
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 373
+
+*   *   *   *   *   *   *   *   id: 373
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 372
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 372
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 370
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 370
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 371
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 371
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: true
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 374
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 375
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 375
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 376
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 376
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 377
+
+*   *   *   *   *   *   *   *   id: 377
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 381
+
+*   *   *   *   *   *   *   *   id: 381
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 380
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 380
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 378
+*   *   *   *   *   *   *   *   *   next: 389
+
+*   *   *   *   *   *   *   *   *   *   id: 378
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 379
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 379
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 389
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 382
+*   *   *   *   *   *   *   *   *   next: 395
+
+*   *   *   *   *   *   *   *   *   *   id: 382
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 385
+*   *   *   *   *   *   *   *   *   *   next: 390
+
+*   *   *   *   *   *   *   *   *   *   *   id: 385
+*   *   *   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   down: 383
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 383
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 384
+*   *   *   *   *   *   *   *   *   *   *   *   next: 386
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 384
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 386
+*   *   *   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   next: 387
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 387
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 388
+*   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 388
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 390
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 391
+
+*   *   *   *   *   *   *   *   *   *   id: 391
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 392
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 392
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 395
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 393
+*   *   *   *   *   *   *   *   *   next: 401
+
+*   *   *   *   *   *   *   *   *   *   id: 393
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 394
+*   *   *   *   *   *   *   *   *   *   next: 396
+
+*   *   *   *   *   *   *   *   *   *   *   id: 394
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 396
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 397
+
+*   *   *   *   *   *   *   *   *   *   id: 397
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 398
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 398
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 401
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 399
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 399
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 400
+*   *   *   *   *   *   *   *   *   *   next: 402
+
+*   *   *   *   *   *   *   *   *   *   *   id: 400
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 402
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 403
+
+*   *   *   *   *   *   *   *   *   *   id: 403
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 404
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 404
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 405
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 406
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 407
+*   next: 499
+
+*   *   id: 407
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 408
+
+*   *   id: 408
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 409
+
+*   *   id: 409
+*   *   kind: SUBROUTINENAME
+*   *   val: moveLeft
+*   *   down: 0
+*   *   next: 410
+
+*   *   id: 410
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 411
+*   *   next: 0
+
+*   *   *   id: 411
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 412
+*   *   *   next: 0
+
+*   *   *   *   id: 412
+*   *   *   *   kind: IFSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 415
+*   *   *   *   next: 498
+
+*   *   *   *   *   id: 415
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 413
+*   *   *   *   *   next: 419
+
+*   *   *   *   *   *   id: 413
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 414
+*   *   *   *   *   *   next: 416
+
+*   *   *   *   *   *   *   id: 414
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 416
+*   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   val: >
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 417
+
+*   *   *   *   *   *   id: 417
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 418
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 418
+*   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 419
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 420
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 420
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 421
+*   *   *   *   *   *   next: 428
+
+*   *   *   *   *   *   *   id: 421
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 422
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 422
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 423
+
+*   *   *   *   *   *   *   *   id: 423
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 427
+
+*   *   *   *   *   *   *   *   id: 427
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 426
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 426
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 424
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 424
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 425
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 425
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: false
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 428
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 429
+*   *   *   *   *   *   next: 459
+
+*   *   *   *   *   *   *   id: 429
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 430
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 430
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 431
+
+*   *   *   *   *   *   *   *   id: 431
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 443
+
+*   *   *   *   *   *   *   *   id: 443
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 439
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 439
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 432
+*   *   *   *   *   *   *   *   *   next: 446
+
+*   *   *   *   *   *   *   *   *   *   id: 432
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 435
+*   *   *   *   *   *   *   *   *   *   next: 440
+
+*   *   *   *   *   *   *   *   *   *   *   id: 435
+*   *   *   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   down: 433
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 433
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 434
+*   *   *   *   *   *   *   *   *   *   *   *   next: 436
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 434
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 436
+*   *   *   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   next: 437
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 437
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 438
+*   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 438
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 440
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 441
+
+*   *   *   *   *   *   *   *   *   *   id: 441
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 442
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 442
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 446
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 444
+*   *   *   *   *   *   *   *   *   next: 449
+
+*   *   *   *   *   *   *   *   *   *   id: 444
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 445
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 445
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 449
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 447
+*   *   *   *   *   *   *   *   *   next: 455
+
+*   *   *   *   *   *   *   *   *   *   id: 447
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 448
+*   *   *   *   *   *   *   *   *   *   next: 450
+
+*   *   *   *   *   *   *   *   *   *   *   id: 448
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 450
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 451
+
+*   *   *   *   *   *   *   *   *   *   id: 451
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 452
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 452
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 455
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 453
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 453
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 454
+*   *   *   *   *   *   *   *   *   *   next: 456
+
+*   *   *   *   *   *   *   *   *   *   *   id: 454
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 456
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 457
+
+*   *   *   *   *   *   *   *   *   *   id: 457
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 458
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 458
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 459
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 460
+*   *   *   *   *   *   next: 467
+
+*   *   *   *   *   *   *   id: 460
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 463
+
+*   *   *   *   *   *   *   id: 463
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 461
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 461
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 462
+*   *   *   *   *   *   *   *   next: 464
+
+*   *   *   *   *   *   *   *   *   id: 462
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 464
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 465
+
+*   *   *   *   *   *   *   *   id: 465
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 466
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 466
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 467
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 468
+*   *   *   *   *   *   next: 475
+
+*   *   *   *   *   *   *   id: 468
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 469
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 469
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 470
+
+*   *   *   *   *   *   *   *   id: 470
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 474
+
+*   *   *   *   *   *   *   *   id: 474
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 473
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 473
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 471
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 471
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 472
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 472
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: true
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 475
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 476
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 476
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 477
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 477
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 478
+
+*   *   *   *   *   *   *   *   id: 478
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 482
+
+*   *   *   *   *   *   *   *   id: 482
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 481
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 481
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 479
+*   *   *   *   *   *   *   *   *   next: 485
+
+*   *   *   *   *   *   *   *   *   *   id: 479
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 480
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 480
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 485
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 483
+*   *   *   *   *   *   *   *   *   next: 488
+
+*   *   *   *   *   *   *   *   *   *   id: 483
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 484
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 484
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 488
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 486
+*   *   *   *   *   *   *   *   *   next: 494
+
+*   *   *   *   *   *   *   *   *   *   id: 486
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 487
+*   *   *   *   *   *   *   *   *   *   next: 489
+
+*   *   *   *   *   *   *   *   *   *   *   id: 487
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 489
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 490
+
+*   *   *   *   *   *   *   *   *   *   id: 490
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 491
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 491
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 494
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 492
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 492
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 493
+*   *   *   *   *   *   *   *   *   *   next: 495
+
+*   *   *   *   *   *   *   *   *   *   *   id: 493
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 495
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 496
+
+*   *   *   *   *   *   *   *   *   *   id: 496
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 497
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 497
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 498
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+
+*   id: 499
+*   kind: SUBROUTINEDEC
+*   val: (null)
+*   down: 500
+*   next: 0
+
+*   *   id: 500
+*   *   kind: STORAGEQUALIFIER
+*   *   val: method
+*   *   down: 0
+*   *   next: 501
+
+*   *   id: 501
+*   *   kind: TYPE
+*   *   val: void
+*   *   down: 0
+*   *   next: 502
+
+*   *   id: 502
+*   *   kind: SUBROUTINENAME
+*   *   val: moveRight
+*   *   down: 0
+*   *   next: 503
+
+*   *   id: 503
+*   *   kind: SUBROUTINEBODY
+*   *   val: (null)
+*   *   down: 504
+*   *   next: 0
+
+*   *   *   id: 504
+*   *   *   kind: STATEMENTS
+*   *   *   val: (null)
+*   *   *   down: 505
+*   *   *   next: 0
+
+*   *   *   *   id: 505
+*   *   *   *   kind: IFSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 513
+*   *   *   *   next: 596
+
+*   *   *   *   *   id: 513
+*   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 506
+*   *   *   *   *   next: 517
+
+*   *   *   *   *   *   id: 506
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 509
+*   *   *   *   *   *   next: 514
+
+*   *   *   *   *   *   *   id: 509
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 507
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 507
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 508
+*   *   *   *   *   *   *   *   next: 510
+
+*   *   *   *   *   *   *   *   *   id: 508
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 510
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 511
+
+*   *   *   *   *   *   *   *   id: 511
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 512
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 512
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 514
+*   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   val: <
+*   *   *   *   *   *   down: 0
+*   *   *   *   *   *   next: 515
+
+*   *   *   *   *   *   id: 515
+*   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 516
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 516
+*   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   val: 510
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   id: 517
+*   *   *   *   *   kind: STATEMENTS
+*   *   *   *   *   val: (null)
+*   *   *   *   *   down: 518
+*   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 518
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 519
+*   *   *   *   *   *   next: 526
+
+*   *   *   *   *   *   *   id: 519
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 520
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 520
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 521
+
+*   *   *   *   *   *   *   *   id: 521
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 525
+
+*   *   *   *   *   *   *   *   id: 525
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 524
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 524
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 522
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 522
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 523
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 523
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: false
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 526
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 527
+*   *   *   *   *   *   next: 549
+
+*   *   *   *   *   *   *   id: 527
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 528
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 528
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 529
+
+*   *   *   *   *   *   *   *   id: 529
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 533
+
+*   *   *   *   *   *   *   *   id: 533
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 532
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 532
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 530
+*   *   *   *   *   *   *   *   *   next: 536
+
+*   *   *   *   *   *   *   *   *   *   id: 530
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 531
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 531
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 536
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 534
+*   *   *   *   *   *   *   *   *   next: 539
+
+*   *   *   *   *   *   *   *   *   *   id: 534
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 535
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 535
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 539
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 537
+*   *   *   *   *   *   *   *   *   next: 545
+
+*   *   *   *   *   *   *   *   *   *   id: 537
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 538
+*   *   *   *   *   *   *   *   *   *   next: 540
+
+*   *   *   *   *   *   *   *   *   *   *   id: 538
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 540
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 541
+
+*   *   *   *   *   *   *   *   *   *   id: 541
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 542
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 542
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 545
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 543
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 543
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 544
+*   *   *   *   *   *   *   *   *   *   next: 546
+
+*   *   *   *   *   *   *   *   *   *   *   id: 544
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 546
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 547
+
+*   *   *   *   *   *   *   *   *   *   id: 547
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 548
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 548
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 549
+*   *   *   *   *   *   kind: LETSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 550
+*   *   *   *   *   *   next: 557
+
+*   *   *   *   *   *   *   id: 550
+*   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   next: 553
+
+*   *   *   *   *   *   *   id: 553
+*   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 551
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 551
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 552
+*   *   *   *   *   *   *   *   next: 554
+
+*   *   *   *   *   *   *   *   *   id: 552
+*   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 554
+*   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 555
+
+*   *   *   *   *   *   *   *   id: 555
+*   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 556
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 556
+*   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   val: 2
+*   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 557
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 558
+*   *   *   *   *   *   next: 565
+
+*   *   *   *   *   *   *   id: 558
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 559
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 559
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 560
+
+*   *   *   *   *   *   *   *   id: 560
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: setColor
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 564
+
+*   *   *   *   *   *   *   *   id: 564
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 563
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 563
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 561
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 561
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 562
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 562
+*   *   *   *   *   *   *   *   *   *   *   kind: KEYCONST
+*   *   *   *   *   *   *   *   *   *   *   val: true
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   id: 565
+*   *   *   *   *   *   kind: DOSTATEMENT
+*   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   down: 566
+*   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   id: 566
+*   *   *   *   *   *   *   kind: SUBROUTINECALL
+*   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   down: 567
+*   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   id: 567
+*   *   *   *   *   *   *   *   kind: CLASSNAME
+*   *   *   *   *   *   *   *   val: Screen
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 568
+
+*   *   *   *   *   *   *   *   id: 568
+*   *   *   *   *   *   *   *   kind: SUBROUTINENAME
+*   *   *   *   *   *   *   *   val: drawRectangle
+*   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   next: 580
+
+*   *   *   *   *   *   *   *   id: 580
+*   *   *   *   *   *   *   *   kind: EXPRESSIONLIST
+*   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   down: 576
+*   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 576
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 569
+*   *   *   *   *   *   *   *   *   next: 583
+
+*   *   *   *   *   *   *   *   *   *   id: 569
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 572
+*   *   *   *   *   *   *   *   *   *   next: 577
+
+*   *   *   *   *   *   *   *   *   *   *   id: 572
+*   *   *   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   down: 570
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 570
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 571
+*   *   *   *   *   *   *   *   *   *   *   *   next: 573
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 571
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 573
+*   *   *   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   next: 574
+
+*   *   *   *   *   *   *   *   *   *   *   *   id: 574
+*   *   *   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   *   *   down: 575
+*   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   *   *   id: 575
+*   *   *   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 577
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: -
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 578
+
+*   *   *   *   *   *   *   *   *   *   id: 578
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 579
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 579
+*   *   *   *   *   *   *   *   *   *   *   kind: INTCONST
+*   *   *   *   *   *   *   *   *   *   *   val: 1
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 583
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 581
+*   *   *   *   *   *   *   *   *   next: 586
+
+*   *   *   *   *   *   *   *   *   *   id: 581
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 582
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 582
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 586
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 584
+*   *   *   *   *   *   *   *   *   next: 592
+
+*   *   *   *   *   *   *   *   *   *   id: 584
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 585
+*   *   *   *   *   *   *   *   *   *   next: 587
+
+*   *   *   *   *   *   *   *   *   *   *   id: 585
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: x
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 587
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 588
+
+*   *   *   *   *   *   *   *   *   *   id: 588
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 589
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 589
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   id: 592
+*   *   *   *   *   *   *   *   *   kind: EXPRESSION
+*   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   down: 590
+*   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 590
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 591
+*   *   *   *   *   *   *   *   *   *   next: 593
+
+*   *   *   *   *   *   *   *   *   *   *   id: 591
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: y
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   id: 593
+*   *   *   *   *   *   *   *   *   *   kind: OP
+*   *   *   *   *   *   *   *   *   *   val: +
+*   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   next: 594
+
+*   *   *   *   *   *   *   *   *   *   id: 594
+*   *   *   *   *   *   *   *   *   *   kind: TERM
+*   *   *   *   *   *   *   *   *   *   val: (null)
+*   *   *   *   *   *   *   *   *   *   down: 595
+*   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   *   *   *   *   *   *   *   id: 595
+*   *   *   *   *   *   *   *   *   *   *   kind: VARNAME
+*   *   *   *   *   *   *   *   *   *   *   val: size
+*   *   *   *   *   *   *   *   *   *   *   down: 0
+*   *   *   *   *   *   *   *   *   *   *   next: 0
+
+*   *   *   *   id: 596
+*   *   *   *   kind: RETURNSTATEMENT
+*   *   *   *   val: (null)
+*   *   *   *   down: 0
+*   *   *   *   next: 0
+

@@ -318,6 +318,7 @@ int lex(void);
 /* AST functions */
 AST_node* ast_alloc_node(AST *ast, int kind, char *val);
 void ast_free(AST *ast);
+void debug_ast_alloc(void);
 
 /* parser functions */
 void debug_parser(AST_node *node);
@@ -553,6 +554,7 @@ AST_node* class(void) {
 		child = child->next;
 
 	child->next = subroutineDec();
+	if(child->next) child = child->next;
 	while((child->next = subroutineDec()))
 		child = child->next;
 
@@ -1310,18 +1312,36 @@ AST_node* parse(void) {
 	return class();
 }
 
+void debug_ast_alloc(void) {
+	for(size_t i = 0; i <= ast.cur; ++i) {
+		fprintf(stderr, "PAGE %zu\n", i);
+		for(size_t j = 0; ast.pages[i][j].kind; ++j) {
+			fprintf(stderr, "\taddress: %p\n"
+					"\tid: %u\n"
+					"\tkind: %s\n"
+					"\tval: %s\n"
+					"\tdown: %p\n"
+					"\tnext: %p\n\n"
+					, (void*)(ast.pages[i]+j),
+					ast.pages[i][j].id,
+					nodes[ast.pages[i][j].kind], ast.pages[i][j].val,
+					(void*)(ast.pages[i][j].down), (void*)(ast.pages[i][j].next));
+		}
+	}
+}
+
 void debug_parser(AST_node *node) {
 	for(; node; node = node->next) {
 		int i;
-		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, astout);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
 		fprintf(astout, "id: %u\n", node->id);
-		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, astout);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
 		fprintf(astout, "kind: %s\n", nodes[node->kind]);
-		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, astout);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
 		fprintf(astout, "val: %s\n", node->val);
-		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, astout);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
 		fprintf(astout, "down: %u\n", node->down ? node->down->id : 0);
-		for(i = 0; i < depth; ++i) fwrite(">   ", 1, 4, astout);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
 		fprintf(astout, "next: %u\n\n", node->next ? node->next->id : 0);
 		if(node->down) {
 			++depth;
@@ -1349,6 +1369,7 @@ int main(int argc, char *argv[]) {
 
 	AST_node *root = parse();
 	depth = 0;
+	//debug_ast_alloc();
 	debug_parser(root);
 	
 	return 0;

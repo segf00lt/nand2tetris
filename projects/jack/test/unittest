@@ -1,0 +1,6 @@
+#!/bin/sh
+
+for f in $(ls | grep \.sh)
+do
+	./"$f"
+done
