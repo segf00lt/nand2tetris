@@ -81,7 +81,7 @@
 #define SYM_TAB_INIT(tab) {\
 	tab.cap = 128;\
 	tab.data = calloc(tab.cap, sizeof(Sym));\
-	tab.count = 0;\
+	tab.count = tab.static_count = tab.this_count = tab.arg_count = tab.local_count = 0;\
 }
 
 enum TOKENS {
@@ -105,19 +105,29 @@ enum TOKENS {
 };
 
 enum SEGMENTS {
-	ARGUMENT,
-	LOCAL,
-	THIS,
-	THAT,
-	TEMP,
-	POINTER,
-	STATIC,
-	CONSTANT,
+	S_ARGUMENT,
+	S_LOCAL,
+	S_THIS,
+	S_THAT,
+	S_TEMP,
+	S_POINTER,
+	S_STATIC,
+	S_CONSTANT,
+};
+
+char *segments[] = {
+	"argument",
+	"local",
+	"this",
+	"that",
+	"temp",
+	"pointer",
+	"static",
+	"constant",
 };
 
 enum NODES {
 	N_CLASS = 1,
-	N_CLASSNAME,
 	N_CLASSVARDEC,
 	N_SUBROUTINEDEC,
 	N_PARAMETERLIST,
@@ -141,6 +151,7 @@ enum NODES {
 	N_KEYCONST,
 	N_STORAGEQUALIFIER,
 	N_TYPE,
+	N_CLASSNAME,
 	N_VARNAME,
 	N_SUBROUTINENAME,
 };
@@ -174,17 +185,6 @@ char *nodes[] = {
 	"TYPE",
 	"VARNAME",
 	"SUBROUTINENAME",
-};
-
-char *segments[] = {
-	"argument",
-	"local",
-	"this",
-	"that",
-	"temp",
-	"pointer",
-	"static",
-	"constant",
 };
 
 size_t keyword_length[] = {
@@ -273,17 +273,21 @@ typedef struct {
 } AST;
 
 typedef struct {
-	char *name;
-	char *type; /* data type string */
-	int kind; /* class, subroutine or var name */
-	int seg; /* memory segment */
 	int pos; /* position in memory segment */
+	int seg; /* memory segment */
+	char *type; /* data type string */
+	char *name;
 } Sym;
 
 typedef struct {
 	Sym *data;
+	char *name;
 	size_t cap;
 	size_t count;
+	size_t static_count;
+	size_t this_count;
+	size_t arg_count;
+	size_t local_count;
 } Sym_tab;
 
 /* global variables */
@@ -406,7 +410,8 @@ void sym_tab_grow(Sym_tab *tab) {
 	size_t old_cap = tab->cap;
 	tab->data = calloc((tab->cap <<= 1), sizeof(Sym));
 	for(size_t i = 0; i < old_cap; ++i) {
-		if(!old_data[i].name) continue;
+		if(!old_data[i].name)
+			continue;
 		sym_tab_def(tab, old_data + i);
 	}
 	free(old_data);
@@ -422,7 +427,8 @@ void sym_tab_def(Sym_tab *tab, Sym *symbol) {
 	if(tab->count >= tab->cap) sym_tab_grow(tab);
 	size_t i = sym_tab_hash(tab, symbol->name);
 	while(tab->data[i].name) {
-		if(!strcmp(tab->data[i].name, symbol->name)) return;
+		if(!strcmp(tab->data[i].name, symbol->name))
+			return;
 		i = (i + 1) % tab->cap;
 	}
 	tab->data[i] = *symbol;
@@ -431,7 +437,7 @@ void sym_tab_def(Sym_tab *tab, Sym *symbol) {
 
 void sym_tab_clear(Sym_tab *tab) {
 	/* NOTE make sure you still have a pointer to the string pool when you call this */
-	tab->count = 0;
+	tab->count = tab->static_count = tab->this_count = tab->arg_count = tab->local_count = 0;
 	for(size_t i = 0; i < tab->cap; ++i) tab->data[i].name = 0;
 }
 
@@ -672,6 +678,7 @@ AST_node* subroutineDec(void) {
 
 	/* subroutineName */
 	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	/* TODO put the name in root->val */
 	child->next = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
 	child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->next;
@@ -1351,6 +1358,62 @@ void debug_parser(AST_node *node) {
 	}
 }
 
+/* NOTE our symbol table only needs to store variables not functions */
+
+void sym_tab_class(Sym_tab *tab, AST_node *node) {
+	AST_node *child;
+	Sym symbol;
+	assert(node->kind == N_CLASS);
+	tab->name = node->val; /* TODO store subroutine name in N_SUBROUTINE */
+	for(node = node->down; node; node = node->next) {
+		if(node->kind != N_CLASSVARDEC)
+			continue;
+		child = node->down;
+		assert(child->kind == N_STORAGEQUALIFIER);
+		if(child->val == keyword[T_FIELD - T_CLASS]) {
+			symbol.seg = S_THIS;
+			symbol.pos = tab->this_count++;
+		} else if(child->val == keyword[T_STATIC - T_CLASS]) {
+			symbol.seg = S_STATIC;
+			symbol.pos = tab->static_count++;
+		} else
+			assert(0); /* unreachable */
+		child = child->next;
+		assert(child->kind == N_TYPE);
+		symbol.type = child->val;
+		child = child->next;
+		assert(child->kind == N_VARNAME);
+		symbol.name = child->val;
+		sym_tab_def(tab, &symbol);
+	}
+}
+
+void sym_tab_subroutine(Sym_tab *tab, AST_node *node) {
+	AST_node *child;
+	Sym symbol;
+	assert(node->kind == N_SUBROUTINEDEC);
+	/* TODO
+	 * enter subroutine arguments
+	 */
+	for(node = node->down; node; node = node->next) {
+		if(node->kind != N_VARDEC)
+			continue;
+		child = node->down;
+		assert(child->kind == N_TYPE);
+		symbol.type = child->val;
+		child = child->next;
+		assert(child->kind == N_VARNAME);
+		symbol.name = child->val;
+		sym_tab_def(tab, &symbol);
+	}
+}
+/* TODO
+ *
+ * parse_test()
+ * sym_tab_build()
+ * compile()
+ */
+
 int main(int argc, char *argv[]) {
 	atexit(cleanup);
 
@@ -1369,7 +1432,6 @@ int main(int argc, char *argv[]) {
 
 	AST_node *root = parse();
 	depth = 0;
-	//debug_ast_alloc();
 	debug_parser(root);
 	
 	return 0;
