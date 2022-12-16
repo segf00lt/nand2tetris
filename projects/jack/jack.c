@@ -501,8 +501,15 @@ int lex(void) {
 
 	/* keyword */
 	for(int i = 0; i < ARRLEN(keyword); ++i) {
+		check = tp[keyword_length[i]];
 		if(strstr(tp,keyword[i]) == tp &&
-				(tp[keyword_length[i]] == ' ' || tp[keyword_length[i]] == ';')) {
+				(check == ' ' ||
+				 check == ';' ||
+				 check == '(' ||
+				 check == '{' ||
+				 check == ',')
+		  )
+		{
 			lexer.ptr += keyword_length[i];
 			return (lexer.token = T_CLASS + i);
 		}
@@ -539,12 +546,12 @@ int lex(void) {
 AST_node* class(void) {
 	AST_node *root, *child;
 
-	if(lex() != T_CLASS) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != T_CLASS) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	fprintf(xmlout,"<class>\n");
 	PARSER_PRINT(depth, "<keyword> class </keyword>\n");
 
-	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
@@ -552,7 +559,7 @@ AST_node* class(void) {
 	strncpy(classname, lexer.text_s, lexer.text_e - lexer.text_s);
 	root = ast_alloc_node(&ast, N_CLASS, classname);
 
-	if(lex() != '{') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	root->down = child = classVarDec();
@@ -568,7 +575,7 @@ AST_node* class(void) {
 	while((child->next = subroutineDec()))
 		child = child->next;
 
-	if(lex() != '}') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 	fprintf(xmlout,"</class>\n");
 
@@ -607,11 +614,11 @@ AST_node* classVarDec(void) {
 		child->next = ast_alloc_node(&ast, N_TYPE, 0);
 		child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	} else
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	child = child->next;
 
-	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
@@ -624,7 +631,7 @@ AST_node* classVarDec(void) {
 	while(lex() == ',') {
 		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
-		if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
@@ -635,7 +642,7 @@ AST_node* classVarDec(void) {
 	}
 
 	if(lexer.token != ';')
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	--depth;
@@ -676,13 +683,12 @@ AST_node* subroutineDec(void) {
 
 		child->next = ast_alloc_node(&ast, N_TYPE, keyword[lexer.token - T_CLASS]);
 	} else
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	child = child->next;
 
 	/* subroutineName */
-	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
-	/* TODO put the name in root->val */
+	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	child->next = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
 	child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->next;
@@ -692,7 +698,7 @@ AST_node* subroutineDec(void) {
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 	/* parameterList */
-	if(lex() != '(') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 	PARSER_PRINT(depth, "<parameterList>\n");
 	++depth;
@@ -700,7 +706,7 @@ AST_node* subroutineDec(void) {
 	child->next = parameterList();
 	child = child->next;
 
-	if(lex() != ')') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	--depth;
 	PARSER_PRINT(depth, "</parameterList>\n");
 	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
@@ -738,12 +744,12 @@ AST_node* parameterList(void) {
 		lexer.ptr = lexer.unget;
 		return root;
 	} else
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	root->down = child;
 
 	/* varName */
-	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	child->next = ast_alloc_node(&ast, N_VARNAME, 0);
 	child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
@@ -770,11 +776,11 @@ AST_node* parameterList(void) {
 
 			child->next = ast_alloc_node(&ast, N_TYPE, keyword[lexer.token - T_CLASS]);
 		} else
-			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		child = child->next;
 
 		/* varName */
-		if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
@@ -792,7 +798,7 @@ AST_node* parameterList(void) {
 AST_node* subroutineBody(void) {
 	AST_node *root, *child;
 
-	if(lex() != '{') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<subroutineBody>\n");
 	++depth;
 	PARSER_PRINT(depth, "<symbol> { </symbol>\n");
@@ -810,7 +816,7 @@ AST_node* subroutineBody(void) {
 	} else
 		root->down = child = statements();
 
-	if(lex() != '}') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 	--depth;
 	PARSER_PRINT(depth, "</subroutineBody>\n");
@@ -846,11 +852,11 @@ AST_node* varDec(void) {
 		child = ast_alloc_node(&ast, N_TYPE, 0);
 		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	} else
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	root->down = child;
 
-	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	child->next = ast_alloc_node(&ast, N_VARNAME, 0);
 	child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->next;
@@ -862,7 +868,7 @@ AST_node* varDec(void) {
 	while(lex() == ',') {
 		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
-		if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 		child->next = ast_alloc_node(&ast, N_VARNAME, 0);
 		child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
@@ -874,7 +880,7 @@ AST_node* varDec(void) {
 	}
 
 	if(lexer.token != ';')
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	--depth;
@@ -927,7 +933,7 @@ AST_node* letStatement(void) {
 	++depth;
 	PARSER_PRINT(depth, "<keyword> let </keyword>\n");
 
-	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	root->down = child = ast_alloc_node(&ast, N_VARNAME, 0);
 	child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
@@ -943,17 +949,17 @@ AST_node* letStatement(void) {
 		child->next = expression();
 		child = child->next;
 
-		if(lex() != ']') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != ']') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<symbol> ] </symbol>\n");
 	}
 
-	if(lex() != '=') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '=') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	/* we can ommit the = in let statements */
 	PARSER_PRINT(depth, "<symbol> = </symbol>\n");
 
 	child->next = expression();
 
-	if(lex() != ';') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != ';') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
 
 	--depth;
@@ -975,32 +981,32 @@ AST_node* ifStatement(void) {
 	++depth;
 	PARSER_PRINT(depth, "<keyword> if </keyword>\n");
 
-	if(lex() != '(') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
 
 	root->down = child = expression();
 
-	if(lex() != ')') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 
-	if(lex() != '{') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 	child->next = statements();
 	if(child->next) child = child->next;
 
-	if(lex() != '}') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 
 	if(lex() == T_ELSE) {
 		PARSER_PRINT(depth, "<keyword> else </keyword>\n");
 
-		if(lex() != '{') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 		child->next = statements();
 
-		if(lex() != '}') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 	} else
 		lexer.ptr = lexer.unget;
@@ -1024,20 +1030,20 @@ AST_node* whileStatement(void) {
 	++depth;
 	PARSER_PRINT(depth, "<keyword> while </keyword>\n");
 
-	if(lex() != '(') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
 
 	root->down = child = expression();
 
-	if(lex() != ')') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 
-	if(lex() != '{') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 	child->next = statements();
 
-	if(lex() != '}') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 
 	--depth;
@@ -1060,7 +1066,7 @@ AST_node* doStatement(void) {
 
 	root->down = subroutineCall();
 
-	if(lex() != ';') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != ';') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
 
 	--depth;
@@ -1092,7 +1098,7 @@ AST_node* returnStatement(void) {
 
 	root->down = expression();
 
-	if(lex() != ';') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != ';') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
 
 	--depth;
@@ -1135,7 +1141,7 @@ AST_node* expression(void) {
 		if(child->next)
 			child = child->next;
 		else
-			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	}
 
 	--depth;
@@ -1149,7 +1155,7 @@ AST_node* term(void) {
 	register char *tmp1, *tmp2, *tmp3;
 
 	if(lex() == T_END)
-		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	if(!(lexer.token >= T_NUMBER && lexer.token <= T_ID) &&
 	   !(lexer.token >= T_TRUE && lexer.token <= T_THIS) && 
@@ -1212,7 +1218,7 @@ AST_node* term(void) {
 			child->next = ast_alloc_node(&ast, N_OP, operators[OP_INDEX]);
 			child->next->next = expression();
 
-			if(lex() != ']') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+			if(lex() != ']') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 			PARSER_PRINT(depth, "<symbol> ] </symbol>\n");
 		}
 		break;
@@ -1221,14 +1227,14 @@ AST_node* term(void) {
 
 		child = expression();
 
-		if(lex() != ')') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 		break;
 	case '-': case '~':
 		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 		child = ast_alloc_node(&ast, N_OP, operators[(lexer.token == '-') ? OP_SUB : OP_NOT]);
 		if(!(child->next = term()))
-			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		break;
 	}
 
@@ -1244,7 +1250,7 @@ AST_node* subroutineCall(void) {
 	AST_node *root, *child;
 	char *tmp0, *tmp1;
 
-	if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	root = ast_alloc_node(&ast, N_SUBROUTINECALL, 0);
 
@@ -1268,7 +1274,7 @@ AST_node* subroutineCall(void) {
 		PARSER_PRINT(depth, "<symbol> . </symbol>\n");
 		if(lex() != T_ID) {
 			child = 0;
-			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		}
 
 		child = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
@@ -1280,10 +1286,10 @@ AST_node* subroutineCall(void) {
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 	}
 
-	if(lex() != '(') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
 	child->next = expressionList();
-	if(lex() != ')') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 
 	--depth;
@@ -1366,10 +1372,11 @@ void debug_parser(AST_node *node) {
 
 /* TODO
  *
+ * IMPORTANT refactor unit tests!!!!!!!!!!!!!!!!!!!!!!!
+ *
  * parse_test()
  * compile()
  *
- * IMPORTANT refactor unit tests!!!!!!!!!!!!!!!!!!!!!!!
  */
 
 /* NOTE our symbol table only needs to store variables not functions */
