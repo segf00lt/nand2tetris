@@ -46,7 +46,7 @@
 #define ARRLEN(x) (sizeof(x) / sizeof(*x))
 #define STRLEN(x) (sizeof(x) / sizeof(*x)) - 1 /* compile-time strlen */
 
-#define AST_PAGE_SIZE 128
+#define AST_PAGE_SIZE 256
 #define STRPOOL_PAGE_SIZE 512
 #define AST_INITIAL_PAGE_COUNT 4
 #define STRPOOL_INITIAL_PAGE_COUNT 4
@@ -501,7 +501,8 @@ int lex(void) {
 
 	/* keyword */
 	for(int i = 0; i < ARRLEN(keyword); ++i) {
-		if(strstr(tp, keyword[i]) == tp) {
+		if(strstr(tp,keyword[i]) == tp &&
+				(tp[keyword_length[i]] == ' ' || tp[keyword_length[i]] == ';')) {
 			lexer.ptr += keyword_length[i];
 			return (lexer.token = T_CLASS + i);
 		}
@@ -555,11 +556,15 @@ AST_node* class(void) {
 	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	root->down = child = classVarDec();
-	while((child->next = classVarDec()))
-		child = child->next;
+	if(!child) {
+		root->down = child = subroutineDec();
+	} else {
+		while((child->next = classVarDec()))
+			child = child->next;
+		child->next = subroutineDec();
+		if(child->next) child = child->next;
+	}
 
-	child->next = subroutineDec();
-	if(child->next) child = child->next;
 	while((child->next = subroutineDec()))
 		child = child->next;
 
@@ -693,7 +698,7 @@ AST_node* subroutineDec(void) {
 	++depth;
 
 	child->next = parameterList();
-	if(child->next) child = child->next; /* empty parameterList returns NULL */
+	child = child->next;
 
 	if(lex() != ')') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	--depth;
@@ -713,6 +718,8 @@ AST_node* parameterList(void) {
 	/* parameterList is a sequence of type followed by varName */
 	AST_node *root, *child;
 
+	root = ast_alloc_node(&ast, N_PARAMETERLIST, 0);
+
 	/* type */
 	if(lex() == T_ID) {
 		PARSER_PRINT(depth, "<identifier> ");
@@ -729,11 +736,10 @@ AST_node* parameterList(void) {
 
 	} else if(lexer.token == ')') { /* empty parameter list */
 		lexer.ptr = lexer.unget;
-		return 0;
+		return root;
 	} else
 		error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 
-	root = ast_alloc_node(&ast, N_PARAMETERLIST, 0);
 	root->down = child;
 
 	/* varName */
@@ -943,8 +949,6 @@ AST_node* letStatement(void) {
 
 	if(lex() != '=') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	/* we can ommit the = in let statements */
-	//child->next = ast_alloc_node(&ast, N_OP, operators[OP_EQ]);
-	//child = child->next;
 	PARSER_PRINT(depth, "<symbol> = </symbol>\n");
 
 	child->next = expression();
@@ -983,7 +987,7 @@ AST_node* ifStatement(void) {
 	PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 	child->next = statements();
-	if(child->next) child = child->next; /* TODO can statements return 0 ???? */
+	if(child->next) child = child->next;
 
 	if(lex() != '}') error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
 	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
@@ -1262,7 +1266,10 @@ AST_node* subroutineCall(void) {
 		root->down->val = strpool_alloc(&spool, tmp1 - tmp0, tmp0);
 
 		PARSER_PRINT(depth, "<symbol> . </symbol>\n");
-		if(lex() != T_ID) error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		if(lex() != T_ID) {
+			child = 0;
+			error(1, 0, "parser error in %s source line %d", __func__, __LINE__);
+		}
 
 		child = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
 		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
@@ -1361,6 +1368,8 @@ void debug_parser(AST_node *node) {
  *
  * parse_test()
  * compile()
+ *
+ * IMPORTANT refactor unit tests!!!!!!!!!!!!!!!!!!!!!!!
  */
 
 /* NOTE our symbol table only needs to store variables not functions */
@@ -1385,8 +1394,6 @@ void sym_tab_build(Sym_tab *tab, AST_node *node) {
 			} else if(child->val == keyword[T_STATIC - T_CLASS]) {
 				symbol.seg = S_STATIC;
 				tmp = &(tab->static_count);
-			} else {
-				assert(0); /* unreachable */
 			}
 
 			child = child->next;
@@ -1454,9 +1461,13 @@ void sym_tab_build(Sym_tab *tab, AST_node *node) {
 }
 
 int main(int argc, char *argv[]) {
+	if(argc == 1)
+		return 1;
+
 	atexit(cleanup);
 
-	fmapopen(argv[1], O_RDONLY, &fm);
+	if(fmapopen(argv[1], O_RDONLY, &fm) < 0)
+		error(1, 0, "%s: no such file or directory", argv[1]);
 	fmapread(&fm);
 	xmlout = fopen("xmlout", "w");
 	astout = fopen("astout", "w");

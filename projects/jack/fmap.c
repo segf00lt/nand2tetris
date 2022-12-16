@@ -10,7 +10,7 @@ int fmapopen(char *name, int perms, Fmap *mp) {
 	*mp = (Fmap){0};
 	mp->fd = open(name, perms);
 
-	return 1;
+	return mp->fd;
 }
 
 int fmapfdopen(int fd, Fmap *mp) {
@@ -19,7 +19,7 @@ int fmapfdopen(int fd, Fmap *mp) {
 	*mp = (Fmap){0};
 	mp->fd = fd;
 
-	return 1;
+	return fd;
 }
 
 void fmapclose(Fmap *mp) {
