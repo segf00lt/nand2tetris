@@ -324,7 +324,7 @@ void ast_free(AST *ast);
 void debug_ast_alloc(void);
 
 /* parser functions */
-void debug_parser(AST_node *node);
+void debug_parser(AST_node *node, size_t depth);
 AST_node* parse(void);
 AST_node* class(void);
 AST_node* classVarDec(void);
@@ -1307,9 +1307,11 @@ void ast_to_xml(AST_node *node, size_t depth) {
 			++depth;
 			for(child = node->down; child; child = child->next) {
 				if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS])
+				{
 					PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
-				else
+				} else {
 					PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+				}
 				child = child->next;
 				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
 				if(child->next)
@@ -1325,10 +1327,11 @@ void ast_to_xml(AST_node *node, size_t depth) {
 			++depth;
 			PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
 			child = child->next;
-			if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS])
+			if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS]) {
 				PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
-			else
+			} else {
 				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+			}
 			for(child = child->next; child; child = child->next)
 				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
 			PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
@@ -1341,10 +1344,11 @@ void ast_to_xml(AST_node *node, size_t depth) {
 			++depth;
 			PARSER_PRINT(depth, "<keyword> var </keyword>\n");
 			child = child->next;
-			if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS])
+			if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS]) {
 				PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
-			else
+			} else {
 				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+			}
 			for(child = child->next; child; child = child->next)
 				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
 			PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
@@ -1447,10 +1451,11 @@ void ast_to_xml(AST_node *node, size_t depth) {
 			PARSER_PRINT(depth, "<keyword> %s </keyword>\n", node->val);
 			break;
 		case N_TYPE:
-			if(node->val >= keyword[T_INT-T_CLASS] && node->val <= keyword[T_VOID-T_CLASS])
+			if(node->val >= keyword[T_INT-T_CLASS] && node->val <= keyword[T_VOID-T_CLASS]) {
 				PARSER_PRINT(depth, "<keyword> %s </keyword>\n", node->val);
-			else
+			} else {
 				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", node->val);
+			}
 			break;
 		case N_CLASSNAME:
 			PARSER_PRINT(depth, "<identifier> %s </identifier>\n", node->val);
