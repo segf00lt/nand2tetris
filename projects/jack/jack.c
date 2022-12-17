@@ -547,11 +547,8 @@ AST_node* class(void) {
 
 	if(lex() != T_CLASS) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
-	fprintf(xmlout,"<class>\n");
-	PARSER_PRINT(depth, "<keyword> class </keyword>\n");
 
 	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -559,7 +556,6 @@ AST_node* class(void) {
 	root = ast_alloc_node(&ast, N_CLASS, classname);
 
 	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	root->down = child = classVarDec();
 	if(!child) {
@@ -575,8 +571,6 @@ AST_node* class(void) {
 		child = child->next;
 
 	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
-	fprintf(xmlout,"</class>\n");
 
 	return root;
 }
@@ -591,9 +585,7 @@ AST_node* classVarDec(void) {
 		return 0;
 	}
 
-	PARSER_PRINT(depth, "<classVarDec>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
 	root = ast_alloc_node(&ast, N_CLASSVARDEC, 0);
 	/* first node in classVarDec says if is static of field */
@@ -601,12 +593,10 @@ AST_node* classVarDec(void) {
 
 	lex();
 	if(lexer.token ==T_INT || lexer.token == T_CHAR || lexer.token == T_BOOL) { /* builtin type */
-		PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
 		child->next = ast_alloc_node(&ast, N_TYPE, keyword[lexer.token - T_CLASS]);
 
 	} else if(lexer.token == T_ID) { /* class type */
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -619,7 +609,6 @@ AST_node* classVarDec(void) {
 
 	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
-	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -628,10 +617,8 @@ AST_node* classVarDec(void) {
 	child = child->next;
 
 	while(lex() == ',') {
-		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 		if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -642,10 +629,8 @@ AST_node* classVarDec(void) {
 
 	if(lexer.token != ';')
 		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	--depth;
-	PARSER_PRINT(depth, "</classVarDec>\n");
 
 	return root;
 }
@@ -660,9 +645,7 @@ AST_node* subroutineDec(void) {
 		return 0;
 	}
 
-	PARSER_PRINT(depth, "<subroutineDec>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
 	root = ast_alloc_node(&ast, N_SUBROUTINEDEC, 0);
 	/* storage qualifiers say whether a subroutine is a constructor a function or a method */
@@ -671,14 +654,12 @@ AST_node* subroutineDec(void) {
 	/* return type */
 	lex();
 	if(lexer.token == T_ID) {
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 		child->next = ast_alloc_node(&ast, N_TYPE, 0);
 		child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	} else if(lexer.token >=T_INT && lexer.token <= T_VOID) {
-		PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
 		child->next = ast_alloc_node(&ast, N_TYPE, keyword[lexer.token - T_CLASS]);
 	} else
@@ -692,14 +673,11 @@ AST_node* subroutineDec(void) {
 	child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->next;
 
-	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 	/* parameterList */
 	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
-	PARSER_PRINT(depth, "<parameterList>\n");
 	++depth;
 
 	child->next = parameterList();
@@ -707,14 +685,11 @@ AST_node* subroutineDec(void) {
 
 	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	--depth;
-	PARSER_PRINT(depth, "</parameterList>\n");
-	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	child->next = subroutineBody();
 	child = child->next;
 
 	--depth;
-	PARSER_PRINT(depth, "</subroutineDec>\n");
 
 	return root;
 }
@@ -727,7 +702,6 @@ AST_node* parameterList(void) {
 
 	/* type */
 	if(lex() == T_ID) {
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -735,7 +709,6 @@ AST_node* parameterList(void) {
 		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
 	} else if(lexer.token >=T_INT && lexer.token <= T_VOID) {
-		PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
 		child = ast_alloc_node(&ast, N_TYPE, keyword[lexer.token - T_CLASS]);
 
@@ -754,16 +727,13 @@ AST_node* parameterList(void) {
 	child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->next;
 
-	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 	while(lex() == ',') {
-		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 		/* type */
 		if(lex() == T_ID) {
-			PARSER_PRINT(depth, "<identifier> ");
 			fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 			fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -771,7 +741,6 @@ AST_node* parameterList(void) {
 			child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
 		} else if(lexer.token >=T_INT && lexer.token <= T_VOID) {
-			PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
 			child->next = ast_alloc_node(&ast, N_TYPE, keyword[lexer.token - T_CLASS]);
 		} else
@@ -780,7 +749,6 @@ AST_node* parameterList(void) {
 
 		/* varName */
 		if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -798,9 +766,7 @@ AST_node* subroutineBody(void) {
 	AST_node *root, *child;
 
 	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<subroutineBody>\n");
 	++depth;
-	PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 	root = ast_alloc_node(&ast, N_SUBROUTINEBODY, 0);
 
@@ -816,9 +782,7 @@ AST_node* subroutineBody(void) {
 		root->down = child = statements();
 
 	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 	--depth;
-	PARSER_PRINT(depth, "</subroutineBody>\n");
 
 	return root;
 }
@@ -833,18 +797,14 @@ AST_node* varDec(void) {
 
 	root = ast_alloc_node(&ast, N_VARDEC, 0);
 
-	PARSER_PRINT(depth, "<varDec>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> var </keyword>\n");
 
 	lex();
 	if(lexer.token == T_INT || lexer.token == T_CHAR || lexer.token == T_BOOL) { /* builtin type */
-		PARSER_PRINT(depth, "<keyword> %s </keyword>\n", keyword[lexer.token - T_CLASS]);
 
 		child = ast_alloc_node(&ast, N_TYPE, keyword[lexer.token - T_CLASS]);
 
 	} else if(lexer.token == T_ID) { /* class type */
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -860,12 +820,10 @@ AST_node* varDec(void) {
 	child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 	child = child->next;
 
-	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 	while(lex() == ',') {
-		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 		if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
@@ -873,17 +831,14 @@ AST_node* varDec(void) {
 		child->next->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		child = child->next;
 
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 	}
 
 	if(lexer.token != ';')
 		error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 	--depth;
-	PARSER_PRINT(depth, "</varDec>\n");
 
 	return root;
 }
@@ -891,7 +846,6 @@ AST_node* varDec(void) {
 AST_node* statements(void) {
 	AST_node *root, *child;
 
-	PARSER_PRINT(depth, "<statements>\n");
 	++depth;
 
 	root = ast_alloc_node(&ast, N_STATEMENTS, 0);
@@ -913,7 +867,6 @@ AST_node* statements(void) {
 	}
 
 	--depth;
-	PARSER_PRINT(depth, "</statements>\n");
 
 	return root;
 }
@@ -928,41 +881,33 @@ AST_node* letStatement(void) {
 
 	root = ast_alloc_node(&ast, N_LETSTATEMENT, 0);
 
-	PARSER_PRINT(depth, "<letStatement>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> let </keyword>\n");
 
 	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	root->down = child = ast_alloc_node(&ast, N_VARNAME, 0);
 	child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
-	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
 	if(lex() != '[') {
 		lexer.ptr = lexer.unget;
 	} else {
-		PARSER_PRINT(depth, "<symbol> [ </symbol>\n");
 
 		child->next = expression();
 		child = child->next;
 
 		if(lex() != ']') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-		PARSER_PRINT(depth, "<symbol> ] </symbol>\n");
 	}
 
 	if(lex() != '=') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	/* we can ommit the = in let statements */
-	PARSER_PRINT(depth, "<symbol> = </symbol>\n");
 
 	child->next = expression();
 
 	if(lex() != ';') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
 
 	--depth;
-	PARSER_PRINT(depth, "</letStatement>\n");
 	return root;
 }
 
@@ -976,44 +921,34 @@ AST_node* ifStatement(void) {
 
 	root = ast_alloc_node(&ast, N_IFSTATEMENT, 0);
 
-	PARSER_PRINT(depth, "<ifStatement>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> if </keyword>\n");
 
 	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
 
 	root->down = child = expression();
 
 	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 
 	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 	child->next = statements();
 	if(child->next) child = child->next;
 
 	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 
 	if(lex() == T_ELSE) {
-		PARSER_PRINT(depth, "<keyword> else </keyword>\n");
 
 		if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-		PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 		child->next = ast_alloc_node(&ast, N_ELSESTATEMENT, 0);
 		child = child->next;
 		child->next = statements();
 
 		if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-		PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 	} else
 		lexer.ptr = lexer.unget;
 
 	--depth;
-	PARSER_PRINT(depth, "</ifStatement>\n");
 	return root;
 }
 
@@ -1027,28 +962,21 @@ AST_node* whileStatement(void) {
 
 	root = ast_alloc_node(&ast, N_WHILESTATEMENT, 0);
 
-	PARSER_PRINT(depth, "<whileStatement>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> while </keyword>\n");
 
 	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
 
 	root->down = child = expression();
 
 	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 
 	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
 	child->next = statements();
 
 	if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> } </symbol>\n");
 
 	--depth;
-	PARSER_PRINT(depth, "</whileStatement>\n");
 	return root;
 }
 
@@ -1061,17 +989,13 @@ AST_node* doStatement(void) {
 	}
 
 	root = ast_alloc_node(&ast, N_DOSTATEMENT, 0);
-	PARSER_PRINT(depth, "<doStatement>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> do </keyword>\n");
 
 	root->down = subroutineCall();
 
 	if(lex() != ';') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
 
 	--depth;
-	PARSER_PRINT(depth, "</doStatement>\n");
 	return root;
 }
 
@@ -1085,14 +1009,10 @@ AST_node* returnStatement(void) {
 
 	root = ast_alloc_node(&ast, N_RETURNSTATEMENT, 0);
 
-	PARSER_PRINT(depth, "<returnStatement>\n");
 	++depth;
-	PARSER_PRINT(depth, "<keyword> return </keyword>\n");
 
 	if(lex() == ';') {
-		PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
 		--depth;
-		PARSER_PRINT(depth, "</returnStatement>\n");
 		return root;
 	} else
 		lexer.ptr = lexer.unget;
@@ -1100,21 +1020,17 @@ AST_node* returnStatement(void) {
 	root->down = expression();
 
 	if(lex() != ';') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
 
 	--depth;
-	PARSER_PRINT(depth, "</returnStatement>\n");
 	return root;
 }
 
 AST_node* expression(void) {
 	AST_node *root, *child;
 
-	PARSER_PRINT(depth, "<expression>\n");
 	++depth;
 	if(!(child = term())) {
 		--depth;
-		PARSER_PRINT(depth, "</expression>\n");
 		return 0;
 	}
 
@@ -1133,7 +1049,6 @@ AST_node* expression(void) {
 			break;
 		}
 
-		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 
 		child->next = ast_alloc_node(&ast, N_OP, operators[i]);
 		child = child->next;
@@ -1146,7 +1061,6 @@ AST_node* expression(void) {
 	}
 
 	--depth;
-	PARSER_PRINT(depth, "</expression>\n");
 
 	return root;
 }
@@ -1166,14 +1080,12 @@ AST_node* term(void) {
 		return 0;
 	}
 
-	PARSER_PRINT(depth, "<term>\n");
 	++depth;
 
 	root = ast_alloc_node(&ast, N_TERM, 0);
 
 	switch(lexer.token) {
 	case T_NUMBER:
-		PARSER_PRINT(depth, "<integerConstant> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </integerConstant>\n", 1, STRLEN(" </integerConstant>\n"), xmlout);
 
@@ -1181,7 +1093,6 @@ AST_node* term(void) {
 		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		break;
 	case T_STRING:
-		PARSER_PRINT(depth, "<stringConstant> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </stringConstant>\n", 1, STRLEN(" </stringConstant>\n"), xmlout);
 
@@ -1189,7 +1100,6 @@ AST_node* term(void) {
 		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		break;
 	case T_TRUE: case T_FALSE: case T_NULL: case T_THIS:
-		PARSER_PRINT(depth, "<keyword> %s </keyword>\n",keyword[lexer.token-T_CLASS]);
 		child = ast_alloc_node(&ast, N_KEYCONST, keyword[lexer.token - T_CLASS]);
 		break;
 	case T_ID:
@@ -1204,7 +1114,6 @@ AST_node* term(void) {
 			break;
 		}
 
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(tmp2, 1, tmp3 - tmp2, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 
@@ -1214,25 +1123,20 @@ AST_node* term(void) {
 		if(lexer.token != '[') {
 			lexer.ptr = lexer.unget;
 		} else {
-			PARSER_PRINT(depth, "<symbol> [ </symbol>\n");
 
 			child->next = ast_alloc_node(&ast, N_OP, operators[OP_INDEX]);
 			child->next->next = expression();
 
 			if(lex() != ']') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-			PARSER_PRINT(depth, "<symbol> ] </symbol>\n");
 		}
 		break;
 	case '(':
-		PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
 
 		child = expression();
 
 		if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-		PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 		break;
 	case '-': case '~':
-		PARSER_PRINT(depth, "<symbol> %c </symbol>\n", lexer.token);
 		child = ast_alloc_node(&ast, N_OP, operators[(lexer.token == '-') ? OP_SUB : OP_NOT]);
 		if(!(child->next = term()))
 			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
@@ -1242,7 +1146,6 @@ AST_node* term(void) {
 	root->down = child;
 
 	--depth;
-	PARSER_PRINT(depth, "</term>\n");
 
 	return root;
 }
@@ -1255,9 +1158,7 @@ AST_node* subroutineCall(void) {
 
 	root = ast_alloc_node(&ast, N_SUBROUTINECALL, 0);
 
-	PARSER_PRINT(depth, "<subroutineCall>\n");
 	++depth;
-	PARSER_PRINT(depth, "<identifier> ");
 	fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 	fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 	tmp0 = lexer.text_s;
@@ -1272,7 +1173,6 @@ AST_node* subroutineCall(void) {
 		root->down = ast_alloc_node(&ast, N_CLASSNAME, 0);
 		root->down->val = strpool_alloc(&spool, tmp1 - tmp0, tmp0);
 
-		PARSER_PRINT(depth, "<symbol> . </symbol>\n");
 		if(lex() != T_ID) {
 			child = 0;
 			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
@@ -1282,30 +1182,24 @@ AST_node* subroutineCall(void) {
 		child->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 		root->down->next = child;
 
-		PARSER_PRINT(depth, "<identifier> ");
 		fwrite(lexer.text_s, 1, lexer.text_e - lexer.text_s, xmlout);
 		fwrite(" </identifier>\n", 1, STRLEN(" </identifier>\n"), xmlout);
 	}
 
 	if(lex() != '(') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
 	child->next = expressionList();
 	if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
-	PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
 
 	--depth;
-	PARSER_PRINT(depth, "</subroutineCall>\n");
 	return root;
 }
 
 AST_node* expressionList(void) {
 	AST_node *root, *child;
-	PARSER_PRINT(depth, "<expressionList>\n");
 	++depth;
 
 	if(!(child = expression())) {
 		--depth;
-		PARSER_PRINT(depth, "</expressionList>\n");
 		return 0;
 	}
 	root = ast_alloc_node(&ast, N_EXPRESSIONLIST, 0);
@@ -1316,14 +1210,12 @@ AST_node* expressionList(void) {
 			lexer.ptr = lexer.unget;
 			break;
 		}
-		PARSER_PRINT(depth, "<symbol> , </symbol>\n");
 
 		child->next = expression();
 		child = child->next;
 	}
 
 	--depth;
-	PARSER_PRINT(depth, "</expressionList>\n");
 	return root;
 }
 
