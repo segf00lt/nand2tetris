@@ -288,6 +288,7 @@ unsigned int depth;
 Fmap fm; /* input file map */
 FILE *xmlout;
 FILE *astout; /* debug output for ast */
+FILE *symout;
 Sym_tab classtab;
 Sym_tab functab;
 char classname[64];
@@ -298,6 +299,7 @@ char* strpool_alloc(Strpool *pool, size_t len, char *s);
 void strpool_free(Strpool *pool);
 void cleanup(void);
 void parser_print(size_t indent, char *fmt, ...);
+void debug_sym_tab(AST_node *node);
 
 /* symbol table functions */
 void sym_tab_grow(Sym_tab *tab);
@@ -447,7 +449,7 @@ void sym_tab_clear(Sym_tab *tab) {
 void sym_tab_print(Sym_tab *tab) {
 	for(size_t i = 0; i < tab->cap; ++i) {
 		if(tab->data[i].name == 0) continue;
-		fprintf(stderr, "SYMBOL\n\tname: %s\n\ttype: %s\n\tseg: %s\n\tpos: %i\n\n",
+		fprintf(symout, "SYMBOL\n\tname: %s\n\ttype: %s\n\tseg: %s\n\tpos: %i\n\n",
 				tab->data[i].name, tab->data[i].type,
 				segments[tab->data[i].seg], tab->data[i].pos);
 	}
@@ -877,7 +879,7 @@ AST_node* ifStatement(void) {
 			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		child->next = ast_alloc_node(&ast, N_ELSESTATEMENT, 0);
 		child = child->next;
-		child->next = statements();
+		child->down = statements();
 		if(lex() != '}')
 			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	} else
@@ -1308,8 +1310,8 @@ void ast_to_xml(AST_node *node, size_t depth) {
 			parser_print(depth, "<symbol> } </symbol>\n");
 			parser_print(depth, "<keyword> else </keyword>\n");
 			parser_print(depth, "<symbol> { </symbol>\n");
-			ast_to_xml(node->next, depth);
-			return;
+			ast_to_xml(node->down, depth);
+			break;
 		case N_WHILESTATEMENT:
 			parser_print(depth, "<whileStatement>\n");
 			++depth;
@@ -1544,11 +1546,19 @@ void sym_tab_build(Sym_tab *tab, AST_node *node) {
 	}
 }
 
-/* TODO
- *
- * tests for symbol table
- * compile()
- */
+/* TODO compile() */
+
+void debug_sym_tab(AST_node *node) {
+	sym_tab_build(&classtab, node);
+	fprintf(symout, "CLASS SYMBOLS: %s\n\n", classtab.name);
+	sym_tab_print(&classtab);
+	for(node = node->down; node->kind != N_SUBROUTINEDEC; node = node->next);
+	for(; node; node = node->next) {
+		sym_tab_build(&functab, node);
+		fprintf(symout, "\nSUBROUTINE SYMBOLS: %s\n\n", functab.name);
+		sym_tab_print(&functab);
+	}
+}
 
 int main(int argc, char *argv[]) {
 	if(argc == 1)
@@ -1561,6 +1571,7 @@ int main(int argc, char *argv[]) {
 	fmapread(&fm);
 	xmlout = fopen("xmlout", "w");
 	astout = fopen("astout", "w");
+	symout = fopen("symout", "w");
 
 	lexer.src = fm.buf;
 	lexer.ptr = 0;
@@ -1574,12 +1585,7 @@ int main(int argc, char *argv[]) {
 	AST_node *root = parse();
 	ast_to_xml(root, 0);
 	debug_parser(root, 0);
-	sym_tab_build(&classtab, root);
-	sym_tab_print(&classtab);
-	fprintf(stderr, "\n#################\n\n");
-	for(root = root->down; root->kind != N_SUBROUTINEDEC; root = root->next);
-	sym_tab_build(&functab, root);
-	sym_tab_print(&functab);
+	debug_sym_tab(root);
 	
 	return 0;
 }
