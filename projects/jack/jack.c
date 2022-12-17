@@ -506,8 +506,7 @@ int lex(void) {
 				(check == ' ' ||
 				 check == ';' ||
 				 check == '(' ||
-				 check == '{' ||
-				 check == ',')
+				 check == '{')
 		  )
 		{
 			lexer.ptr += keyword_length[i];
@@ -1004,6 +1003,8 @@ AST_node* ifStatement(void) {
 		if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		PARSER_PRINT(depth, "<symbol> { </symbol>\n");
 
+		child->next = ast_alloc_node(&ast, N_ELSESTATEMENT, 0);
+		child = child->next;
 		child->next = statements();
 
 		if(lex() != '}') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
@@ -1349,7 +1350,7 @@ void debug_ast_alloc(void) {
 	}
 }
 
-void debug_parser(AST_node *node) {
+void debug_parser(AST_node *node, size_t depth) {
 	for(; node; node = node->next) {
 		int i;
 		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
@@ -1364,7 +1365,7 @@ void debug_parser(AST_node *node) {
 		fprintf(astout, "next: %u\n\n", node->next ? node->next->id : 0);
 		if(node->down) {
 			++depth;
-			debug_parser(node->down);
+			debug_parser(node->down, depth);
 			--depth;
 		}
 	}
@@ -1378,6 +1379,199 @@ void debug_parser(AST_node *node) {
  * compile()
  *
  */
+
+void ast_to_xml(AST_node *node, size_t depth) {
+	AST_node *child;
+	if(node->kind == N_CLASS) {
+		fprintf(xmlout, "<class>\n");
+		fprintf(xmlout, "  <keyword> class </keyword>\n");
+		fprintf(xmlout, "  <identifier> %s </identifier>\n", node->val);
+		fprintf(xmlout, "  <symbol> { </symbol>\n");
+		++depth;
+		ast_to_xml(node->down, depth);
+		--depth;
+		fprintf(xmlout, "</class>\n");
+		return;
+	}
+	for(; node; node = node->next) {
+		switch(node->kind) {
+		case N_SUBROUTINEDEC:
+			PARSER_PRINT(depth, "<subroutineDec>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</subroutineDec>\n");
+			break;
+		case N_SUBROUTINEBODY:
+			PARSER_PRINT(depth, "<subroutineBody>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</subroutineBody>\n");
+			break;
+		case N_PARAMETERLIST:
+			PARSER_PRINT(depth, "<symbol> ( </symbol>\n");
+			PARSER_PRINT(depth, "<parameterList>");
+			++depth;
+			for(child = node->down; child; child = child->next) {
+				if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS])
+					PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
+				else
+					PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+				child = child->next;
+				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+				if(child->next)
+					PARSER_PRINT(depth, "<symbol> , </symbol>\n");
+			}
+			--depth;
+			PARSER_PRINT(depth, "</parameterList>");
+			PARSER_PRINT(depth, "<symbol> ) </symbol>\n");
+			break;
+		case N_CLASSVARDEC:
+			child = node->down;
+			PARSER_PRINT(depth, "<classVarDec>");
+			++depth;
+			PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
+			child = child->next;
+			if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS])
+				PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
+			else
+				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+			for(child = child->next; child; child = child->next)
+				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+			PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
+			--depth;
+			PARSER_PRINT(depth, "</classVarDec>");
+			break;
+		case N_VARDEC:
+			child = node->down;
+			PARSER_PRINT(depth, "<varDec>");
+			++depth;
+			PARSER_PRINT(depth, "<keyword> var </keyword>\n");
+			child = child->next;
+			if(child->val >= keyword[T_INT-T_CLASS] && child->val <= keyword[T_VOID-T_CLASS])
+				PARSER_PRINT(depth, "<keyword> %s </keyword>\n", child->val);
+			else
+				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+			for(child = child->next; child; child = child->next)
+				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", child->val);
+			PARSER_PRINT(depth, "<symbol> ; </symbol>\n");
+			--depth;
+			PARSER_PRINT(depth, "</varDec>");
+			break;
+		case N_STATEMENTS:
+			PARSER_PRINT(depth, "<statements>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</statements>\n");
+			break;
+		case N_LETSTATEMENT:
+			PARSER_PRINT(depth, "<letStatement>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</letStatement>\n");
+			break;
+		case N_IFSTATEMENT:
+			PARSER_PRINT(depth, "<ifStatement>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</ifStatement>\n");
+			break;
+		case N_ELSESTATEMENT:
+			/* NOTE if we hit this it means we're inside an N_IFSTATEMENT */
+			PARSER_PRINT(depth, "<keyword> else </keyword>\n");
+			PARSER_PRINT(depth, "<symbol> { </symbol>\n");
+			ast_to_xml(node->next, depth);
+			PARSER_PRINT(depth, "<symbol> } </symbol>\n");
+			break;
+		case N_WHILESTATEMENT:
+			PARSER_PRINT(depth, "<whileStatement>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</whileStatement>\n");
+			break;
+		case N_DOSTATEMENT:
+			PARSER_PRINT(depth, "<doStatement>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</doStatement>\n");
+			break;
+		case N_RETURNSTATEMENT:
+			PARSER_PRINT(depth, "<returnStatement>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</returnStatement>\n");
+			break;
+		case N_EXPRESSIONLIST:
+			PARSER_PRINT(depth, "<expressionList>\n");
+			++depth;
+			if(node->down) ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</expressionList>\n");
+			break;
+		case N_EXPRESSION:
+			PARSER_PRINT(depth, "<expression>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</expression>\n");
+			break;
+		case N_TERM:
+			PARSER_PRINT(depth, "<term>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</term>\n");
+			break;
+		case N_SUBROUTINECALL:
+			PARSER_PRINT(depth, "<subroutineCall>\n");
+			++depth;
+			ast_to_xml(node->down, depth);
+			--depth;
+			PARSER_PRINT(depth, "</subroutineCall>\n");
+			break;
+		case N_OP:
+			PARSER_PRINT(depth, "<symbol> %s </symbol>\n", node->val);
+			break;
+		case N_UNOP:
+			PARSER_PRINT(depth, "<symbol> %s </symbol>\n", node->val);
+			break;
+		case N_INTCONST:
+			PARSER_PRINT(depth, "<integerConstant> %s </integerConstant>\n", node->val);
+			break;
+		case N_STRINGCONST:
+			PARSER_PRINT(depth, "<stringConstant> %s </stringConstant>\n", node->val);
+			break;
+		case N_KEYCONST:
+			PARSER_PRINT(depth, "<keyword> %s </keyword>\n", node->val);
+			break;
+		case N_STORAGEQUALIFIER:
+			PARSER_PRINT(depth, "<keyword> %s </keyword>\n", node->val);
+			break;
+		case N_TYPE:
+			if(node->val >= keyword[T_INT-T_CLASS] && node->val <= keyword[T_VOID-T_CLASS])
+				PARSER_PRINT(depth, "<keyword> %s </keyword>\n", node->val);
+			else
+				PARSER_PRINT(depth, "<identifier> %s </identifier>\n", node->val);
+			break;
+		case N_CLASSNAME:
+			PARSER_PRINT(depth, "<identifier> %s </identifier>\n", node->val);
+			break;
+		case N_VARNAME:
+			PARSER_PRINT(depth, "<identifier> %s </identifier>\n", node->val);
+			break;
+		case N_SUBROUTINENAME:
+			PARSER_PRINT(depth, "<identifier> %s </identifier>\n", node->val);
+			break;
+		}
+	}
+}
 
 /* NOTE our symbol table only needs to store variables not functions */
 void sym_tab_build(Sym_tab *tab, AST_node *node) {
@@ -1489,8 +1683,7 @@ int main(int argc, char *argv[]) {
 	AST_INIT(ast);
 
 	AST_node *root = parse();
-	depth = 0;
-	debug_parser(root);
+	debug_parser(root, 0);
 	sym_tab_build(&classtab, root);
 	sym_tab_print(&classtab);
 	fprintf(stderr, "\n#################\n\n");
