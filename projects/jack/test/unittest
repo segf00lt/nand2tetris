@@ -4,3 +4,4 @@ for f in $(ls | grep \.sh)
 do
 	./"$f"
 done
+rm xmlout
