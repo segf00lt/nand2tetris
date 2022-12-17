@@ -215,17 +215,22 @@ enum OPERATORS {
 	OP_SUB,
 	OP_MUL,
 	OP_DIV,
-	OP_NOT,
 	OP_AND,
 	OP_OR,
 	OP_LT,
 	OP_GT,
 	OP_EQ,
+	OP_NOT,
+	OP_NEG,
 	OP_INDEX,
 	OP_COMMA,
 };
 
-char *operators[] = { "+", "-", "*", "/", "~", "&", "|", "<", ">", "=", "[", "," };
+char *operators[] = { "+", "-", "*", "/", "&", "|", "<", ">", "=", "~", "-", "[", "," };
+char *op_comp_tab[] = {
+	"add\n", "sub\n", "call Math.multiply 2\n",  "call Math.divide 2\n",
+	"and\n", "or\n", "lt\n", "gt\n", "eq\n", "not\n", "neg\n",
+};
 
 typedef struct {
 	char *base;
@@ -255,6 +260,8 @@ typedef struct syntax_node {
 typedef struct {
 	/* since we never free individual nodes *free stores the first vacant
 	 * node in the current page */
+	AST_node *root;
+	AST_node *subroutines;
 	AST_node *free;
 	AST_node *base; /* base of current page */
 	AST_node **pages;
@@ -284,14 +291,16 @@ typedef struct {
 /* global variables */
 Lexer lexer;
 AST ast;
-unsigned int depth;
+size_t depth;
 Fmap fm; /* input file map */
 FILE *xmlout;
 FILE *astout; /* debug output for ast */
 FILE *symout;
+FILE *vmout;
 Sym_tab classtab;
 Sym_tab functab;
 char classname[64];
+char vmfilename[64];
 Strpool spool;
 
 /* utility functions */
@@ -302,6 +311,7 @@ void parser_print(size_t indent, char *fmt, ...);
 void debug_sym_tab(AST_node *node);
 
 /* symbol table functions */
+void sym_tab_build(Sym_tab *tab, AST_node *node);
 void sym_tab_grow(Sym_tab *tab);
 void sym_tab_def(Sym_tab *tab, Sym *symbol);
 size_t sym_tab_hash(Sym_tab *tab, char *name);
@@ -319,7 +329,7 @@ void debug_ast_alloc(void);
 
 /* parser functions */
 void debug_parser(AST_node *node, size_t depth);
-AST_node* parse(void);
+void parse(void);
 AST_node* class(void);
 AST_node* classVarDec(void);
 AST_node* subroutineDec(void);
@@ -337,6 +347,13 @@ AST_node* expression(void);
 AST_node* term(void);
 AST_node* subroutineCall(void);
 
+/* compiler (code generation) functions */
+void compile(void);
+void compile_statements(AST_node *node);
+void compile_expression(AST_node *node);
+void compile_term(AST_node *node);
+
+/* function declarations */
 void parser_print(size_t indent, char *fmt, ...) {
 	va_list args;
 	va_start(args, fmt);
@@ -347,6 +364,56 @@ void parser_print(size_t indent, char *fmt, ...) {
 	}
 	vfprintf(xmlout, fmt, args);
 	va_end(args);
+}
+
+void debug_ast_alloc(void) {
+	for(size_t i = 0; i <= ast.cur; ++i) {
+		fprintf(stderr, "PAGE %zu\n", i);
+		for(size_t j = 0; ast.pages[i][j].kind; ++j) {
+			fprintf(stderr, "\taddress: %p\n"
+					"\tid: %u\n"
+					"\tkind: %s\n"
+					"\tval: %s\n"
+					"\tdown: %p\n"
+					"\tnext: %p\n\n"
+					, (void*)(ast.pages[i]+j),
+					ast.pages[i][j].id,
+					nodes[ast.pages[i][j].kind], ast.pages[i][j].val,
+					(void*)(ast.pages[i][j].down), (void*)(ast.pages[i][j].next));
+		}
+	}
+}
+
+void debug_parser(AST_node *node, size_t depth) {
+	for(; node; node = node->next) {
+		int i;
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
+		fprintf(astout, "id: %u\n", node->id);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
+		fprintf(astout, "kind: %s\n", nodes[node->kind]);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
+		fprintf(astout, "val: %s\n", node->val);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
+		fprintf(astout, "down: %u\n", node->down ? node->down->id : 0);
+		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
+		fprintf(astout, "next: %u\n\n", node->next ? node->next->id : 0);
+		if(node->down) {
+			++depth;
+			debug_parser(node->down, depth);
+			--depth;
+		}
+	}
+}
+
+void debug_sym_tab(AST_node *node) {
+	sym_tab_build(&classtab, node);
+	fprintf(symout, "CLASS SYMBOLS: %s\n\n", classtab.name);
+	sym_tab_print(&classtab);
+	for(node = ast.subroutines; node; node = node->next) {
+		sym_tab_build(&functab, node);
+		fprintf(symout, "\nSUBROUTINE SYMBOLS: %s\n\n", functab.name);
+		sym_tab_print(&functab);
+	}
 }
 
 char* strpool_alloc(Strpool *pool, size_t len, char *s) {
@@ -400,6 +467,94 @@ void ast_free(AST *ast) {
 	free(ast->pages);
 }
 
+/* NOTE our symbol table only needs to store variables not functions */
+void sym_tab_build(Sym_tab *tab, AST_node *node) {
+	AST_node *child;
+	Sym symbol;
+	size_t *tmp;
+
+	switch(node->kind) {
+	case N_CLASS:
+		tab->name = node->val;
+		node = node->down;
+		if(node->kind != N_CLASSVARDEC)
+			break;
+
+		for(; node && node->kind == N_CLASSVARDEC; node = node->next) {
+			child = node->down;
+			assert(child->kind == N_STORAGEQUALIFIER);
+			if(child->val == keyword[T_FIELD - T_CLASS]) {
+				symbol.seg = S_THIS;
+				tmp = &(tab->this_count);
+			} else if(child->val == keyword[T_STATIC - T_CLASS]) {
+				symbol.seg = S_STATIC;
+				tmp = &(tab->static_count);
+			}
+
+			child = child->next;
+			assert(child->kind == N_TYPE);
+			symbol.type = child->val;
+			while((child = child->next)) {
+				symbol.pos = (*tmp)++;
+				assert(child->kind == N_VARNAME);
+				symbol.name = child->val;
+				sym_tab_def(tab, &symbol);
+			}
+		}
+		break;
+	case N_SUBROUTINEDEC:
+		node = node->down;
+		assert(node->kind == N_STORAGEQUALIFIER);
+		if(node->val == keyword[T_METHOD - T_CLASS]) {
+			symbol = (Sym){
+				.pos = tab->arg_count++,
+				.seg = S_ARGUMENT,
+				.type = keyword[T_THIS - T_CLASS],
+				.name = keyword[T_THIS - T_CLASS],
+			};
+			sym_tab_def(tab, &symbol);
+		}
+
+		node = node->next->next;
+		assert(node->kind == N_SUBROUTINENAME);
+		tab->name = node->val;
+
+		node = node->next;
+		assert(node->kind == N_PARAMETERLIST);
+
+		symbol.seg = S_ARGUMENT; /* the segment will be ARG for the duration of the loop */
+		for(child = node->down; child; child = child->next) {
+			symbol.pos = tab->arg_count++;
+			assert(child->kind == N_TYPE);
+			symbol.type = child->val;
+			child = child->next;
+			assert(child->kind == N_VARNAME);
+			symbol.name = child->val;
+			sym_tab_def(tab, &symbol);
+		}
+
+		node = node->next;
+		assert(node->kind == N_SUBROUTINEBODY);
+		node = node->down;
+		if(node->kind != N_VARDEC)
+			break;
+
+		symbol.seg = S_LOCAL;
+		for(; node && node->kind == N_VARDEC; node = node->next) {
+			child = node->down;
+			assert(child->kind == N_TYPE);
+			symbol.type = child->val;
+			while((child = child->next)) {
+				symbol.pos = tab->local_count++;
+				assert(child->kind == N_VARNAME);
+				symbol.name = child->val;
+				sym_tab_def(tab, &symbol);
+			}
+		}
+		break;
+	}
+}
+
 void cleanup(void) {
 	strpool_free(&spool);
 	ast_free(&ast);
@@ -408,6 +563,8 @@ void cleanup(void) {
 	fmapclose(&fm);
 	fclose(xmlout);
 	fclose(astout);
+	fclose(symout);
+	fclose(vmout);
 }
 
 void sym_tab_grow(Sym_tab *tab) {
@@ -558,17 +715,17 @@ AST_node* class(void) {
 	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	strncpy(classname, lexer.text_s, lexer.text_e - lexer.text_s);
-	root = ast_alloc_node(&ast, N_CLASS, classname);
+	ast.root = root = ast_alloc_node(&ast, N_CLASS, classname);
 
 	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
 	root->down = child = classVarDec();
 	if(!child) {
-		root->down = child = subroutineDec();
+		ast.subroutines = root->down = child = subroutineDec();
 	} else {
 		while((child->next = classVarDec()))
 			child = child->next;
-		child->next = subroutineDec();
+		ast.subroutines = child->next = subroutineDec();
 		if(child->next) child = child->next;
 	}
 
@@ -1125,48 +1282,9 @@ AST_node* expressionList(void) {
 	return root;
 }
 
-AST_node* parse(void) {
+void parse(void) {
 	lex();
-	return class();
-}
-
-void debug_ast_alloc(void) {
-	for(size_t i = 0; i <= ast.cur; ++i) {
-		fprintf(stderr, "PAGE %zu\n", i);
-		for(size_t j = 0; ast.pages[i][j].kind; ++j) {
-			fprintf(stderr, "\taddress: %p\n"
-					"\tid: %u\n"
-					"\tkind: %s\n"
-					"\tval: %s\n"
-					"\tdown: %p\n"
-					"\tnext: %p\n\n"
-					, (void*)(ast.pages[i]+j),
-					ast.pages[i][j].id,
-					nodes[ast.pages[i][j].kind], ast.pages[i][j].val,
-					(void*)(ast.pages[i][j].down), (void*)(ast.pages[i][j].next));
-		}
-	}
-}
-
-void debug_parser(AST_node *node, size_t depth) {
-	for(; node; node = node->next) {
-		int i;
-		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
-		fprintf(astout, "id: %u\n", node->id);
-		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
-		fprintf(astout, "kind: %s\n", nodes[node->kind]);
-		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
-		fprintf(astout, "val: %s\n", node->val);
-		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
-		fprintf(astout, "down: %u\n", node->down ? node->down->id : 0);
-		for(i = 0; i < depth; ++i) fwrite("*   ", 1, 4, astout);
-		fprintf(astout, "next: %u\n\n", node->next ? node->next->id : 0);
-		if(node->down) {
-			++depth;
-			debug_parser(node->down, depth);
-			--depth;
-		}
-	}
+	class();
 }
 
 void ast_to_xml(AST_node *node, size_t depth) {
@@ -1458,106 +1576,24 @@ void ast_to_xml(AST_node *node, size_t depth) {
 	}
 }
 
-/* NOTE our symbol table only needs to store variables not functions */
-void sym_tab_build(Sym_tab *tab, AST_node *node) {
-	AST_node *child;
-	Sym symbol;
-	size_t *tmp;
+/* TODO compile() */
+void compile(void) {
+	AST_node *node;
 
-	switch(node->kind) {
-	case N_CLASS:
-		tab->name = node->val;
-		node = node->down;
-		if(node->kind != N_CLASSVARDEC)
-			break;
+	sym_tab_build(&classtab, ast.root);
 
-		for(; node && node->kind == N_CLASSVARDEC; node = node->next) {
-			child = node->down;
-			assert(child->kind == N_STORAGEQUALIFIER);
-			if(child->val == keyword[T_FIELD - T_CLASS]) {
-				symbol.seg = S_THIS;
-				tmp = &(tab->this_count);
-			} else if(child->val == keyword[T_STATIC - T_CLASS]) {
-				symbol.seg = S_STATIC;
-				tmp = &(tab->static_count);
-			}
-
-			child = child->next;
-			assert(child->kind == N_TYPE);
-			symbol.type = child->val;
-			while((child = child->next)) {
-				symbol.pos = (*tmp)++;
-				assert(child->kind == N_VARNAME);
-				symbol.name = child->val;
-				sym_tab_def(tab, &symbol);
-			}
-		}
-		break;
-	case N_SUBROUTINEDEC:
-		node = node->down;
-		assert(node->kind == N_STORAGEQUALIFIER);
-		if(node->val == keyword[T_METHOD - T_CLASS]) {
-			symbol = (Sym){
-				.pos = tab->arg_count++,
-				.seg = S_ARGUMENT,
-				.type = keyword[T_THIS - T_CLASS],
-				.name = keyword[T_THIS - T_CLASS],
-			};
-			sym_tab_def(tab, &symbol);
-		}
-
-		node = node->next->next;
-		assert(node->kind == N_SUBROUTINENAME);
-		tab->name = node->val;
-
-		node = node->next;
-		assert(node->kind == N_PARAMETERLIST);
-
-		symbol.seg = S_ARGUMENT; /* the segment will be ARG for the duration of the loop */
-		for(child = node->down; child; child = child->next) {
-			symbol.pos = tab->arg_count++;
-			assert(child->kind == N_TYPE);
-			symbol.type = child->val;
-			child = child->next;
-			assert(child->kind == N_VARNAME);
-			symbol.name = child->val;
-			sym_tab_def(tab, &symbol);
-		}
-
-		node = node->next;
-		assert(node->kind == N_SUBROUTINEBODY);
-		node = node->down;
-		if(node->kind != N_VARDEC)
-			break;
-
-		symbol.seg = S_LOCAL;
-		for(; node && node->kind == N_VARDEC; node = node->next) {
-			child = node->down;
-			assert(child->kind == N_TYPE);
-			symbol.type = child->val;
-			while((child = child->next)) {
-				symbol.pos = tab->local_count++;
-				assert(child->kind == N_VARNAME);
-				symbol.name = child->val;
-				sym_tab_def(tab, &symbol);
-			}
-		}
-		break;
+	for(node = ast.subroutines; node; node = node->next) {
+		sym_tab_build(&functab, node);
 	}
 }
 
-/* TODO compile() */
+void compile_statements(AST_node *node) {
+}
 
-void debug_sym_tab(AST_node *node) {
-	sym_tab_build(&classtab, node);
-	fprintf(symout, "CLASS SYMBOLS: %s\n\n", classtab.name);
-	sym_tab_print(&classtab);
-	for(node = node->down; node->kind != N_SUBROUTINEDEC; node = node->next);
-	for(; node; node = node->next) {
-		sym_tab_build(&functab, node);
-		fprintf(symout, "\nSUBROUTINE SYMBOLS: %s\n\n", functab.name);
-		sym_tab_print(&functab);
-	}
+void compile_expression(AST_node *node) {
+}
+
+void compile_term(AST_node *node) {
 }
 
 int main(int argc, char *argv[]) {
@@ -1568,10 +1604,18 @@ int main(int argc, char *argv[]) {
 
 	if(fmapopen(argv[1], O_RDONLY, &fm) < 0)
 		error(1, 0, "%s: no such file or directory", argv[1]);
+	int i;
+	for(i = 0; i < strlen(argv[1]); ++i) {
+		if(argv[1][i]=='.')
+			break;
+		vmfilename[i] = argv[1][i];
+	}
+	strcpy(vmfilename+i, ".vm");
 	fmapread(&fm);
 	xmlout = fopen("xmlout", "w");
 	astout = fopen("astout", "w");
 	symout = fopen("symout", "w");
+	vmout = fopen(vmfilename, "w");
 
 	lexer.src = fm.buf;
 	lexer.ptr = 0;
@@ -1582,10 +1626,14 @@ int main(int argc, char *argv[]) {
 	SYM_TAB_INIT(functab);
 	AST_INIT(ast);
 
-	AST_node *root = parse();
-	ast_to_xml(root, 0);
-	debug_parser(root, 0);
-	debug_sym_tab(root);
+	parse();
+
+	/* tests */
+	ast_to_xml(ast.root, 0);
+	debug_parser(ast.root, 0);
+	debug_sym_tab(ast.root);
+
+	compile();
 	
 	return 0;
 }
