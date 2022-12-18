@@ -240,8 +240,8 @@ enum LABELS {
 	L_WHILE_END,
 };
 
-char *labels[] = { "IF_TRUE", "IF_FALSE", "IF_END", "WHILE_EXP", "WHILE_END", };
-unsigned int label_count[ARRLEN(labels)];
+char *labels[5] = { "IF_TRUE", "IF_FALSE", "IF_END", "WHILE_EXP", "WHILE_END", };
+int label_count[5] = {0,0,0,0,0};
 
 typedef struct {
 	char *base;
@@ -425,6 +425,8 @@ void debug_sym_tab(AST_node *node) {
 		fprintf(symout, "\nSUBROUTINE SYMBOLS: %s\n\n", functab.name);
 		sym_tab_print(&functab);
 	}
+	sym_tab_clear(&classtab);
+	sym_tab_clear(&functab);
 }
 
 char* strpool_alloc(Strpool *pool, size_t len, char *s) {
@@ -1619,12 +1621,16 @@ void compile(void) {
 		while(child && child->kind == N_VARDEC) child = child->next;
 		assert(child->kind == N_STATEMENTS);
 		compile_statements(child);
+		sym_tab_clear(&functab);
 	}
+
+	sym_tab_clear(&classtab);
 }
 
 void compile_statements(AST_node *node) {
 	AST_node *child;
 	Sym *symbol;
+	int l_true, l_false, l_end, l_exp;
 
 	for(node = node->down; node; node = node->next) {
 		child = node->down;
@@ -1672,47 +1678,47 @@ void compile_statements(AST_node *node) {
 			break;
 		case N_IFSTATEMENT:
 			assert(child->kind == N_EXPRESSION);
-			++label_count[L_IF_TRUE];
-			++label_count[L_IF_FALSE];
-			++label_count[L_IF_END];
+			l_true = label_count[L_IF_TRUE]++;
+			l_false = label_count[L_IF_FALSE]++;
+			l_end = label_count[L_IF_END]++;
 			compile_expression(child);
 			fprintf(vmout,  "if-goto %s%u\n"
 					"goto %s%u\n"
 					"label %s%u\n",
-					labels[L_IF_TRUE], label_count[L_IF_TRUE],
-					labels[L_IF_FALSE], label_count[L_IF_FALSE],
-					labels[L_IF_TRUE], label_count[L_IF_TRUE]);
+					labels[L_IF_TRUE], l_true,
+					labels[L_IF_FALSE], l_false,
+					labels[L_IF_TRUE], l_true);
 			child = child->next;
 			assert(child->kind == N_STATEMENTS);
 			compile_statements(child);
 			if(!child->next) {
-				fprintf(vmout, "label %s%u\n", labels[L_IF_FALSE], label_count[L_IF_FALSE]);
-				break;
+				fprintf(vmout, "label %s%u\n", labels[L_IF_FALSE], l_false);
+			} else {
+				assert(child->next->kind == N_ELSESTATEMENT);
+				child = child->next;
+				fprintf(vmout,  "goto %s%u\n"
+						"label %s%u\n",
+						labels[L_IF_END], l_end,
+						labels[L_IF_FALSE], l_false);
+				compile_statements(child);
+				fprintf(vmout, "label %s%u\n", labels[L_IF_END], l_end);
 			}
-			assert(child->next->kind == N_ELSESTATEMENT);
-			child = child->next;
-			fprintf(vmout,  "goto %s%u\n"
-					"label %s%u\n",
-					labels[L_IF_END], label_count[L_IF_END],
-					labels[L_IF_FALSE], label_count[L_IF_FALSE]);
-			compile_statements(child);
-			fprintf(vmout, "label %s%u\n", labels[L_IF_END], label_count[L_IF_END]);
 			break;
 		case N_WHILESTATEMENT:
-			++label_count[L_WHILE_EXP];
-			++label_count[L_WHILE_END];
-			fprintf(vmout, "label %s%u\n", labels[L_WHILE_EXP], label_count[L_WHILE_EXP]);
+			l_exp = label_count[L_WHILE_EXP]++;
+			l_end = label_count[L_WHILE_END]++;
+			fprintf(vmout, "label %s%u\n", labels[L_WHILE_EXP], l_exp);
 			assert(child->kind == N_EXPRESSION);
 			compile_expression(child);
 			fprintf(vmout,  "not\n"
 					"if-goto %s%u\n",
-					labels[L_WHILE_END], label_count[L_WHILE_END]);
+					labels[L_WHILE_END], l_end);
 			assert(child->next && child->next->kind == N_STATEMENTS);
 			compile_statements(child->next);
 			fprintf(vmout,  "goto %s%u\n"
 					"label %s%u\n",
-					labels[L_WHILE_EXP], label_count[L_WHILE_EXP],
-					labels[L_WHILE_END], label_count[L_WHILE_END]);
+					labels[L_WHILE_EXP], l_exp,
+					labels[L_WHILE_END], l_end);
 			break;
 		}
 	}
