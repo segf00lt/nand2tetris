@@ -228,9 +228,20 @@ enum OPERATORS {
 
 char *operators[] = { "+", "-", "*", "/", "&", "|", "<", ">", "=", "~", "-", "[", "," };
 char *op_comp_tab[] = {
-	"add\n", "sub\n", "call Math.multiply 2\n",  "call Math.divide 2\n",
-	"and\n", "or\n", "lt\n", "gt\n", "eq\n", "not\n", "neg\n",
+	"add", "sub", "call Math.multiply 2",  "call Math.divide 2",
+	"and", "or", "lt", "gt", "eq", "not", "neg",
 };
+
+enum LABELS {
+	L_IF_TRUE,
+	L_IF_FALSE,
+	L_IF_END,
+	L_WHILE_EXP,
+	L_WHILE_END,
+};
+
+char *labels[] = { "IF_TRUE", "IF_FALSE", "IF_END", "WHILE_EXP", "WHILE_END", };
+unsigned int label_count[ARRLEN(labels)];
 
 typedef struct {
 	char *base;
@@ -282,6 +293,7 @@ typedef struct {
 	char *name;
 	size_t cap;
 	size_t count;
+	/* TODO segment count union */
 	size_t static_count;
 	size_t this_count;
 	size_t arg_count;
@@ -299,8 +311,6 @@ FILE *symout;
 FILE *vmout;
 Sym_tab classtab;
 Sym_tab functab;
-char classname[64];
-char vmfilename[64];
 Strpool spool;
 
 /* utility functions */
@@ -352,6 +362,7 @@ void compile(void);
 void compile_statements(AST_node *node);
 void compile_expression(AST_node *node);
 void compile_term(AST_node *node);
+void compile_subroutinecall(AST_node *node);
 
 /* function declarations */
 void parser_print(size_t indent, char *fmt, ...) {
@@ -597,6 +608,17 @@ void sym_tab_def(Sym_tab *tab, Sym *symbol) {
 	++tab->count;
 }
 
+Sym* sym_tab_look(Sym_tab *tab, char *name) {
+	size_t i, origin;
+	origin = i = sym_tab_hash(tab, name);
+	do {
+		if(tab->data[i].name && !strcmp(tab->data[i].name, name))
+			return tab->data + i;
+		i = (i + 1) % tab->cap;
+	} while(i != origin);
+	return 0;
+}
+
 void sym_tab_clear(Sym_tab *tab) {
 	/* NOTE make sure you still have a pointer to the string pool when you call this */
 	tab->count = tab->static_count = tab->this_count = tab->arg_count = tab->local_count = 0;
@@ -714,8 +736,8 @@ AST_node* class(void) {
 	if(lex() != T_CLASS) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 	if(lex() != T_ID) error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
-	strncpy(classname, lexer.text_s, lexer.text_e - lexer.text_s);
-	ast.root = root = ast_alloc_node(&ast, N_CLASS, classname);
+	ast.root = root = ast_alloc_node(&ast, N_CLASS, 0);
+	root->val = strpool_alloc(&spool, lexer.text_e - lexer.text_s, lexer.text_s);
 
 	if(lex() != '{') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 
@@ -1208,7 +1230,7 @@ AST_node* term(void) {
 		if(lex() != ')') error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		break;
 	case '-': case '~':
-		child = ast_alloc_node(&ast, N_OP, operators[(lexer.token == '-') ? OP_SUB : OP_NOT]);
+		child = ast_alloc_node(&ast, N_UNOP, operators[(lexer.token == '-') ? OP_SUB : OP_NOT]);
 		if(!(child->next = term()))
 			error(1, 0, "parser error in %s on compiler source line %d", __func__, __LINE__);
 		break;
@@ -1237,6 +1259,7 @@ AST_node* subroutineCall(void) {
 		root->down = child = ast_alloc_node(&ast, N_SUBROUTINENAME, 0);
 		child->val = strpool_alloc(&spool, tmp1 - tmp0, tmp0);
 	} else {
+		/* TODO find a way to differentiate class names from var names */
 		root->down = ast_alloc_node(&ast, N_CLASSNAME, 0);
 		root->down->val = strpool_alloc(&spool, tmp1 - tmp0, tmp0);
 		if(lex() != T_ID) {
@@ -1576,24 +1599,241 @@ void ast_to_xml(AST_node *node, size_t depth) {
 	}
 }
 
-/* TODO compile() */
 void compile(void) {
-	AST_node *node;
+	AST_node *node, *child;
 
 	sym_tab_build(&classtab, ast.root);
 
 	for(node = ast.subroutines; node; node = node->next) {
 		sym_tab_build(&functab, node);
+		fprintf(vmout, "function %s.%s %zu\n", classtab.name, functab.name, functab.local_count);
+		child = node->down;
+		if(child->val == keyword[T_CONSTRUCT - T_CLASS]) /* constructor */
+			fprintf(vmout, "push constant %zu\n" "call Memory.alloc 1\n" "pop pointer 0\n",
+					classtab.this_count);
+		else if(child->val == keyword[T_METHOD - T_CLASS]) /* method */
+			fprintf(vmout, "push argument 0\n" "pop pointer 0\n");
+		child = child->next->next->next->next;
+		assert(child->kind == N_SUBROUTINEBODY);
+		child = child->down;
+		while(child && child->kind == N_VARDEC) child = child->next;
+		assert(child->kind == N_STATEMENTS);
+		compile_statements(child);
 	}
 }
 
 void compile_statements(AST_node *node) {
+	AST_node *child;
+	Sym *symbol;
+
+	for(node = node->down; node; node = node->next) {
+		child = node->down;
+		switch(node->kind) {
+		case N_LETSTATEMENT:
+			assert(child->kind == N_VARNAME);
+			symbol = sym_tab_look(&functab, child->val);
+			if(!symbol)
+				symbol = sym_tab_look(&classtab, child->val);
+			if(!symbol)
+				error(1, 0, "variable %s is not defined", child->val);
+			child = child->next;
+			if(child->kind == N_EXPRESSION) {
+				assert(child->kind == N_EXPRESSION);
+				compile_expression(child);
+				fprintf(vmout, "pop %s %i\n", segments[symbol->seg], symbol->pos);
+				break;
+			}
+			/* subscripting */
+			assert(child->kind == N_OP && child->val[0] == '[');
+			assert(child->down->kind == N_EXPRESSION);
+			compile_expression(child->down);
+			fprintf(vmout, "push %s %i\n" "add\n", segments[symbol->seg], symbol->pos); /* &s[i] */
+			child = child->next;
+			assert(child->kind == N_EXPRESSION);
+			compile_expression(child);
+			fprintf(vmout,  "pop temp 0\n" /* save rvalue */
+					"pop pointer 1\n" /* save address of lvalue */
+					"push temp 0\n" /* push rvalue back on stack */
+					"pop that 0\n"); /* put rvalue at address of lvalue */
+			break;
+		case N_DOSTATEMENT:
+			assert(child->kind == N_SUBROUTINECALL);
+			compile_subroutinecall(child);
+			fprintf(vmout, "pop temp 0\n"); /* do statements discard return values */
+			break;
+		case N_RETURNSTATEMENT:
+			if(!child) {
+				fprintf(vmout, "push constant 0\n");
+			} else {
+				assert(child->kind == N_EXPRESSION);
+				compile_expression(child);
+			}
+			fprintf(vmout, "return\n");
+			break;
+		case N_IFSTATEMENT:
+			assert(child->kind == N_EXPRESSION);
+			++label_count[L_IF_TRUE];
+			++label_count[L_IF_FALSE];
+			++label_count[L_IF_END];
+			compile_expression(child);
+			fprintf(vmout,  "if-goto %s%u\n"
+					"goto %s%u\n"
+					"label %s%u\n",
+					labels[L_IF_TRUE], label_count[L_IF_TRUE],
+					labels[L_IF_FALSE], label_count[L_IF_FALSE],
+					labels[L_IF_TRUE], label_count[L_IF_TRUE]);
+			child = child->next;
+			assert(child->kind == N_STATEMENTS);
+			compile_statements(child);
+			if(!child->next) {
+				fprintf(vmout, "label %s%u\n", labels[L_IF_FALSE], label_count[L_IF_FALSE]);
+				break;
+			}
+			assert(child->next->kind == N_ELSESTATEMENT);
+			child = child->next;
+			fprintf(vmout,  "goto %s%u\n"
+					"label %s%u\n",
+					labels[L_IF_END], label_count[L_IF_END],
+					labels[L_IF_FALSE], label_count[L_IF_FALSE]);
+			compile_statements(child);
+			fprintf(vmout, "label %s%u\n", labels[L_IF_END], label_count[L_IF_END]);
+			break;
+		case N_WHILESTATEMENT:
+			++label_count[L_WHILE_EXP];
+			++label_count[L_WHILE_END];
+			fprintf(vmout, "label %s%u\n", labels[L_WHILE_EXP], label_count[L_WHILE_EXP]);
+			assert(child->kind == N_EXPRESSION);
+			compile_expression(child);
+			fprintf(vmout,  "not\n"
+					"if-goto %s%u\n",
+					labels[L_WHILE_END], label_count[L_WHILE_END]);
+			assert(child->next && child->next->kind == N_STATEMENTS);
+			compile_statements(child->next);
+			fprintf(vmout,  "goto %s%u\n"
+					"label %s%u\n",
+					labels[L_WHILE_EXP], label_count[L_WHILE_EXP],
+					labels[L_WHILE_END], label_count[L_WHILE_END]);
+			break;
+		}
+	}
 }
 
 void compile_expression(AST_node *node) {
+	unsigned int i;
+	assert(node && node->kind == N_EXPRESSION);
+	node = node->down;
+	assert(node && node->kind == N_TERM);
+	compile_term(node);
+	if(!node->next)
+		return;
+	node = node->next;
+	for(; node && node->next; node = node->next->next) { /* loop over N_OP N_TERM pairs */
+		assert(node->kind == N_OP);
+		assert(node->next && node->next->kind == N_TERM);
+		for(i = 0; i < ARRLEN(operators); ++i)
+			if(operators[i][0] == node->val[0])
+				break;
+		assert(i < 9); /* we can only have one of 9 operators at this level */
+		compile_term(node->next);
+		fprintf(vmout, "%s\n", op_comp_tab[i]);
+	}
 }
 
 void compile_term(AST_node *node) {
+	Sym *symbol;
+	int strconstlen;
+	assert(node->kind == N_TERM);
+	node = node->down;
+
+	switch(node->kind) {
+	case N_SUBROUTINECALL:
+		compile_subroutinecall(node);
+		return;
+	case N_INTCONST:
+		fprintf(vmout, "push constant %s\n", node->val);
+		return;
+	case N_STRINGCONST:
+		strconstlen = strlen(node->val);
+		fprintf(vmout, "push constant %i\n" "call String.new 1\n", strconstlen);
+		for(int i = 0; i < strconstlen; ++i)
+			fprintf(vmout, "push constant %i\n" "call String.appendChar 2\n", node->val[i]);
+		return;
+	case N_KEYCONST:
+		if(node->val == keyword[T_TRUE - T_CLASS])
+			fprintf(vmout, "push constant 0\n" "not\n");
+		else if(node->val == keyword[T_FALSE - T_CLASS] || node->val == keyword[T_NULL - T_CLASS])
+			fprintf(vmout, "push constant 0\n");
+		else if(node->val == keyword[T_THIS - T_CLASS])
+			fprintf(vmout, "push pointer 0\n");
+		else
+			assert(0);
+		return;
+	case N_VARNAME:
+		symbol = sym_tab_look(&functab, node->val);
+		if(!symbol)
+			symbol = sym_tab_look(&classtab, node->val);
+		if(!symbol)
+			error(1, 0, "variable %s is not defined", node->val);
+		if(!node->next || !(node->next->kind == N_OP && node->next->val[0] == '[')) {
+			fprintf(vmout, "push %s %i\n", segments[symbol->seg], symbol->pos);
+			return;
+		}
+		node = node->next;
+		compile_expression(node->down);
+		fprintf(vmout,  "push %s %i\n"
+				"add\n"
+				"pop pointer 1\n"
+				"push that 0\n",
+				segments[symbol->seg], symbol->pos);
+		return;
+	case N_EXPRESSION:
+		compile_expression(node);
+		return;
+	case N_UNOP:
+		assert(node->next && node->next->kind == N_TERM);
+		compile_term(node->next);
+		fprintf(vmout, "%s\n", op_comp_tab[(node->val[0] == '-') ? OP_SUB : OP_NOT]);
+		return;
+	}
+}
+
+void compile_subroutinecall(AST_node *node) {
+	Sym *symbol;
+	char *classname, *funcname;
+	unsigned int argcount;
+
+	argcount = 0;
+	node = node->down;
+
+	if(node->kind == N_SUBROUTINENAME) {
+		classname = classtab.name;
+		fprintf(vmout, "push pointer 0\n");
+		++argcount;
+	} else if(node->kind == N_CLASSNAME) {
+		symbol = sym_tab_look(&functab, node->val);
+		if(!symbol)
+			symbol = sym_tab_look(&classtab, node->val);
+		if(!symbol)
+			classname = node->val;
+		else {
+			classname = symbol->type;
+			++argcount;
+			fprintf(vmout,  "push %s %i\n", segments[symbol->seg], symbol->pos);
+		}
+		node = node->next;
+		assert(node->kind == N_SUBROUTINENAME);
+	}
+	funcname = node->val;
+
+	node = node->next;
+	assert(node->kind == N_EXPRESSIONLIST);
+	for(node = node->down; node; node = node->next) {
+		assert(node->kind == N_EXPRESSION);
+		compile_expression(node);
+		++argcount;
+	}
+
+	fprintf(vmout, "call %s.%s %u\n", classname, funcname, argcount);
 }
 
 int main(int argc, char *argv[]) {
@@ -1604,18 +1844,11 @@ int main(int argc, char *argv[]) {
 
 	if(fmapopen(argv[1], O_RDONLY, &fm) < 0)
 		error(1, 0, "%s: no such file or directory", argv[1]);
-	int i;
-	for(i = 0; i < strlen(argv[1]); ++i) {
-		if(argv[1][i]=='.')
-			break;
-		vmfilename[i] = argv[1][i];
-	}
-	strcpy(vmfilename+i, ".vm");
 	fmapread(&fm);
 	xmlout = fopen("xmlout", "w");
 	astout = fopen("astout", "w");
 	symout = fopen("symout", "w");
-	vmout = fopen(vmfilename, "w");
+	vmout = fopen("vmout", "w");
 
 	lexer.src = fm.buf;
 	lexer.ptr = 0;
