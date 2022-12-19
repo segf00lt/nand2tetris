@@ -1,0 +1,29 @@
+CLASS SYMBOLS: Main
+
+
+SUBROUTINE SYMBOLS: main
+
+SYMBOL
+	name: i
+	type: int
+	seg: local
+	pos: 2
+
+SYMBOL
+	name: length
+	type: int
+	seg: local
+	pos: 1
+
+SYMBOL
+	name: a
+	type: Array
+	seg: local
+	pos: 0
+
+SYMBOL
+	name: sum
+	type: int
+	seg: local
+	pos: 3
+

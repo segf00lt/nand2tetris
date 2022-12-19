@@ -4,4 +4,4 @@ for f in $(ls | grep \.sh)
 do
 	./"$f"
 done
-rm astout xmlout symout
+rm astout xmlout symout vmout

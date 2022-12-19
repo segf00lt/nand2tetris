@@ -1,0 +1,284 @@
+CLASS SYMBOLS: Square
+
+SYMBOL
+	name: x
+	type: int
+	seg: this
+	pos: 0
+
+SYMBOL
+	name: size
+	type: int
+	seg: this
+	pos: 2
+
+SYMBOL
+	name: y
+	type: int
+	seg: this
+	pos: 1
+
+
+SUBROUTINE SYMBOLS: new
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: dispose
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: draw
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: erase
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: incSize
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: decSize
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: moveUp
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: moveDown
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: moveLeft
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: moveRight
+
+SYMBOL
+	name: Asize
+	type: int
+	seg: argument
+	pos: 2
+
+SYMBOL
+	name: Ay
+	type: int
+	seg: argument
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 3
+
+SYMBOL
+	name: Ax
+	type: int
+	seg: argument
+	pos: 0
+

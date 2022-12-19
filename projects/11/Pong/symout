@@ -1,0 +1,140 @@
+CLASS SYMBOLS: PongGame
+
+SYMBOL
+	name: exit
+	type: boolean
+	seg: this
+	pos: 3
+
+SYMBOL
+	name: bat
+	type: Bat
+	seg: this
+	pos: 0
+
+SYMBOL
+	name: batWidth
+	type: int
+	seg: this
+	pos: 6
+
+SYMBOL
+	name: lastWall
+	type: int
+	seg: this
+	pos: 5
+
+SYMBOL
+	name: ball
+	type: Ball
+	seg: this
+	pos: 1
+
+SYMBOL
+	name: instance
+	type: PongGame
+	seg: static
+	pos: 0
+
+SYMBOL
+	name: wall
+	type: int
+	seg: this
+	pos: 2
+
+SYMBOL
+	name: score
+	type: int
+	seg: this
+	pos: 4
+
+
+SUBROUTINE SYMBOLS: new
+
+
+SUBROUTINE SYMBOLS: dispose
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: newInstance
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: getInstance
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: run
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+SYMBOL
+	name: key
+	type: char
+	seg: local
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: moveBall
+
+SYMBOL
+	name: ballRight
+	type: int
+	seg: local
+	pos: 5
+
+SYMBOL
+	name: ballLeft
+	type: int
+	seg: local
+	pos: 4
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+SYMBOL
+	name: bouncingDirection
+	type: int
+	seg: local
+	pos: 1
+
+SYMBOL
+	name: key
+	type: char
+	seg: local
+	pos: 0
+
+SYMBOL
+	name: batRight
+	type: int
+	seg: local
+	pos: 3
+
+SYMBOL
+	name: batLeft
+	type: int
+	seg: local
+	pos: 2
+

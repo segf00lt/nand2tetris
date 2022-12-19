@@ -1,0 +1,50 @@
+CLASS SYMBOLS: Main
+
+SYMBOL
+	name: test
+	type: boolean
+	seg: static
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: main
+
+SYMBOL
+	name: game
+	type: SquareGame
+	seg: local
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: more
+
+SYMBOL
+	name: game
+	type: SquareGame
+	seg: local
+	pos: 0
+
+SYMBOL
+	name: i
+	type: int
+	seg: local
+	pos: 1
+
+SYMBOL
+	name: a
+	type: Array
+	seg: local
+	pos: 4
+
+SYMBOL
+	name: j
+	type: int
+	seg: local
+	pos: 2
+
+SYMBOL
+	name: s
+	type: String
+	seg: local
+	pos: 3
+

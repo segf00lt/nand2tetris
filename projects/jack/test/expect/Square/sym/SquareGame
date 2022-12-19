@@ -1,0 +1,56 @@
+CLASS SYMBOLS: SquareGame
+
+SYMBOL
+	name: square
+	type: Square
+	seg: this
+	pos: 0
+
+SYMBOL
+	name: direction
+	type: int
+	seg: this
+	pos: 1
+
+
+SUBROUTINE SYMBOLS: new
+
+
+SUBROUTINE SYMBOLS: dispose
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: moveSquare
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+
+SUBROUTINE SYMBOLS: run
+
+SYMBOL
+	name: exit
+	type: boolean
+	seg: local
+	pos: 1
+
+SYMBOL
+	name: this
+	type: this
+	seg: argument
+	pos: 0
+
+SYMBOL
+	name: key
+	type: char
+	seg: local
+	pos: 0
+
