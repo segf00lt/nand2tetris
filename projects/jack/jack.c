@@ -233,7 +233,7 @@ char *op_comp_tab[] = {
 };
 
 enum LABELS {
-	L_IF_TRUE,
+	L_IF_TRUE = 0,
 	L_IF_FALSE,
 	L_IF_END,
 	L_WHILE_EXP,
@@ -241,7 +241,7 @@ enum LABELS {
 };
 
 char *labels[5] = { "IF_TRUE", "IF_FALSE", "IF_END", "WHILE_EXP", "WHILE_END", };
-int label_count[5] = {0,0,0,0,0};
+unsigned int label_count[5];
 
 typedef struct {
 	char *base;
@@ -1622,6 +1622,7 @@ void compile(void) {
 		assert(child->kind == N_STATEMENTS);
 		compile_statements(child);
 		sym_tab_clear(&functab);
+		label_count[0] = label_count[1] = label_count[2] = label_count[3] = label_count[4] = 0;
 	}
 
 	sym_tab_clear(&classtab);
@@ -1630,7 +1631,7 @@ void compile(void) {
 void compile_statements(AST_node *node) {
 	AST_node *child;
 	Sym *symbol;
-	int l_true, l_false, l_end, l_exp;
+	unsigned int l_true, l_false, l_end, l_exp;
 
 	for(node = node->down; node; node = node->next) {
 		child = node->down;
@@ -1700,7 +1701,7 @@ void compile_statements(AST_node *node) {
 						"label %s%u\n",
 						labels[L_IF_END], l_end,
 						labels[L_IF_FALSE], l_false);
-				compile_statements(child);
+				compile_statements(child->down);
 				fprintf(vmout, "label %s%u\n", labels[L_IF_END], l_end);
 			}
 			break;
@@ -1798,7 +1799,7 @@ void compile_term(AST_node *node) {
 	case N_UNOP:
 		assert(node->next && node->next->kind == N_TERM);
 		compile_term(node->next);
-		fprintf(vmout, "%s\n", op_comp_tab[(node->val[0] == '-') ? OP_SUB : OP_NOT]);
+		fprintf(vmout, "%s\n", op_comp_tab[(node->val[0] == '-') ? OP_NEG : OP_NOT]);
 		return;
 	}
 }
