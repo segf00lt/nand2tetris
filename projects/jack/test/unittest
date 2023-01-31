@@ -1,6 +1,6 @@
 #!/bin/sh
 
-for f in $(ls | grep \.sh)
+for f in *.sh
 do
 	./"$f"
 done
